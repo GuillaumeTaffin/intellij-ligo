@@ -9,10 +9,19 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.guillaumetaffin.intellij.ligo.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.guillaumetaffin.intellij.ligo.toolWindow.MyToolWindowFactory"
+                    id="MyToolWindow"/>
+
+        <fileType
+                name="JsLigo File"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoFileType"
+                fieldName="INSTANCE"
+                language="JsLigo"
+                extensions="jsligo"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener"
+                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
 </idea-plugin>
