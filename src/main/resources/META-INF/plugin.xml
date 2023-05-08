@@ -13,6 +13,6 @@
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
+        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
 </idea-plugin>
