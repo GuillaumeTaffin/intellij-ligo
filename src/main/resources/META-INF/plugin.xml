@@ -18,6 +18,10 @@
                 fieldName="INSTANCE"
                 language="JsLigo"
                 extensions="jsligo"/>
+
+        <lang.parserDefinition
+                language="JsLigo"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParserDefinition"/>
     </extensions>
 
     <applicationListeners>

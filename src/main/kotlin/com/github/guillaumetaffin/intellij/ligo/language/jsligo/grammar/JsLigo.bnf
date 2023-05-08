@@ -21,4 +21,8 @@
 
 simpleFile ::= item_*
 
-private item_ ::= (TYPE_DEF_KEYWORD|SEMICOLON|ASSIGNMENT_OPERATOR)
+private item_ ::= (keyword|operator)
+
+keyword ::= TYPE_DEF_KEYWORD | SEMICOLON
+
+operator ::= ASSIGNMENT_OPERATOR
