@@ -1,0 +1,24 @@
+{
+  parserClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="JsLigo"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi"
+  psiImplPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.impl"
+
+  elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTypes"
+  elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoElementType"
+  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenType"
+
+  tokens = [
+    TYPE_DEF_KEYWORD = "type"
+    SEMICOLON = ";"
+    ASSIGNMENT_OPERATOR="="
+  ]
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (TYPE_DEF_KEYWORD|SEMICOLON|ASSIGNMENT_OPERATOR)
