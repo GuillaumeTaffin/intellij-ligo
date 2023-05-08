@@ -1,4 +1,4 @@
-package com.github.guillaumetaffin.intellijligo.listeners
+package com.github.guillaumetaffin.intellij.ligo.listeners
 
 import com.intellij.ide.FrameStateListener
 import com.intellij.openapi.diagnostic.thisLogger

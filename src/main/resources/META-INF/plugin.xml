@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.guillaumetaffin.intellijligo</id>
-    <name>intellij-ligo Template</name>
+    <name>LIGO Language Support</name>
     <vendor>guillaumetaffin</vendor>
 
     <depends>com.intellij.modules.platform</depends>
@@ -9,10 +9,10 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.guillaumetaffin.intellijligo.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.guillaumetaffin.intellij.ligo.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.guillaumetaffin.intellijligo.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
+        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener" topic="com.intellij.ide.FrameStateListener"/>
     </applicationListeners>
 </idea-plugin>

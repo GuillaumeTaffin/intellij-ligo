@@ -1,4 +1,4 @@
-package com.github.guillaumetaffin.intellijligo
+package com.github.guillaumetaffin.intellij.ligo
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

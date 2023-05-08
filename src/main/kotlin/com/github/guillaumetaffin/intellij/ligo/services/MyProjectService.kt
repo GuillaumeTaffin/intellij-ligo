@@ -1,9 +1,9 @@
-package com.github.guillaumetaffin.intellijligo.services
+package com.github.guillaumetaffin.intellij.ligo.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
-import com.github.guillaumetaffin.intellijligo.MyBundle
+import com.github.guillaumetaffin.intellij.ligo.MyBundle
 
 @Service(Service.Level.PROJECT)
 class MyProjectService(project: Project) {
