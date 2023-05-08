@@ -13,16 +13,16 @@
   tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenType"
 
   tokens = [
-    TYPE_DEF_KEYWORD = "type"
-    SEMICOLON = ";"
+    TYPE_DEF_KEYWORD="type"
+    SEMICOLON=";"
     ASSIGNMENT_OPERATOR="="
+    TYPE_NAME="regexp:[a-zA-Z][a-zA-Z]+"
+    WHITE_SPACE="regexp:\s+"
   ]
 }
 
 simpleFile ::= item_*
 
-private item_ ::= (keyword|operator)
+private item_ ::= (type_assignment)
 
-keyword ::= TYPE_DEF_KEYWORD | SEMICOLON
-
-operator ::= ASSIGNMENT_OPERATOR
+type_assignment ::= TYPE_DEF_KEYWORD TYPE_NAME WHITESPACE? ASSIGNMENT_OPERATOR TYPE_NAME SEMICOLON

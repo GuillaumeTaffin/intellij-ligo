@@ -22,6 +22,10 @@
         <lang.parserDefinition
                 language="JsLigo"
                 implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParserDefinition"/>
+
+        <lang.syntaxHighlighterFactory
+                language="JsLigo"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.syntax.JsLigoSyntaxHighlighterFactory"/>
     </extensions>
 
     <applicationListeners>
