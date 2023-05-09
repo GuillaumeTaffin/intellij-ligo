@@ -2,6 +2,7 @@ package com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser
 
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoLanguage
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoFile
+import com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenSets
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTypes
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
@@ -28,9 +29,12 @@ class JsLigoParserDefinition : ParserDefinition {
 
     override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
 
-    override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
+    override fun getStringLiteralElements(): TokenSet = JsLigoTokenSets.STRING_LITERALS
+
+    override fun getWhitespaceTokens(): TokenSet = JsLigoTokenSets.WHITE_SPACES
 
     override fun createElement(node: ASTNode?): PsiElement = JsLigoTypes.Factory.createElement(node)
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = JsLigoFile(viewProvider)
+
 }
