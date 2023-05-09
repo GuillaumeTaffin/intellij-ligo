@@ -27,13 +27,14 @@ WHITE_SPACE=\s+
 SEMICOLON=";"
 COLON=":"
 EQ==
-IDENTIFIER=[a-zA-Z][a-zA-Z_0-9]+
+IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]+
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
 
 // keywords
 TYPE_ALIAS_KW=type
 CONST_KW=const
 LET_KW=let
+AS_KW=as
 
 %state TYPE_ALIAS
 %state VAR_ASSIGN
@@ -51,6 +52,7 @@ LET_KW=let
 }
 
 <VAR_ASSIGN> {
+    {AS_KW}                 { return AS_KW; }
     {IDENTIFIER}            { return IDENTIFIER; }
     {EQ}                    { return EQ; }
     {COLON}                 { return COLON; }

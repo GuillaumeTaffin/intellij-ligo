@@ -21,6 +21,8 @@ private top_level_declarations ::= type_alias_declaration
 
 type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ IDENTIFIER SEMICOLON?
 
-var_assignment ::= (CONST_KW|LET_KW) IDENTIFIER COLON IDENTIFIER EQ var_value SEMICOLON?
+var_assignment ::= (CONST_KW|LET_KW) IDENTIFIER (COLON IDENTIFIER)? EQ var_value SEMICOLON?
 
-var_value ::= STRING_LITERAL
+var_value ::= literal_value (AS_KW IDENTIFIER)?
+
+literal_value ::= STRING_LITERAL

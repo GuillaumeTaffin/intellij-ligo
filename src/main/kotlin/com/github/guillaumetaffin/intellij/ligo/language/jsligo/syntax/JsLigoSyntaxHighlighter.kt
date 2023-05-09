@@ -39,6 +39,7 @@ private fun IElementType?.isKeyWord(): Boolean =
     this == TYPE_ALIAS_KW
             || this == LET_KW
             || this == CONST_KW
+            || this == AS_KW
 
 
 object Token {
