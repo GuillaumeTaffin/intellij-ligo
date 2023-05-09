@@ -12,37 +12,15 @@
   elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoElementType"
   tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenType"
 
-
-  tokens = [
-//    TYPE_DEF_KEYWORD="type"
-//    SEMICOLON=";"
-//    ASSIGNMENT_OPERATOR="="
-//    TYPE_NAME="regexp:[a-zA-Z][a-zA-Z]+"
-//    STRING_LITERAL='regexp:/"((?:\\.|[^\\"])*)"/'
-//    EOL="regexp:\n+"
-//    WHITE_SPACE="regexp:\s+"
-  ]
 }
 
-simpleFile ::= item_*
+jsLigoFile ::= top_level_declarations*
 
-private item_ ::= type_assignment
-        | var_assignment
+private top_level_declarations ::= type_alias_declaration
+    | var_assignment
 
-type_assignment ::= TYPE_DEF_KW
-                    ID
-                    ASSIGNMENT_OPERATOR
-                    ID
-                    SEMICOLON?
-                    EOL*
+type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ IDENTIFIER SEMICOLON?
 
-var_assignment ::= (CONST_KW|LET_KW)
-                   ID
-                   COLON
-                   ID
-                   ASSIGNMENT_OPERATOR
-                   value
-                   SEMICOLON?
-                   EOL*
+var_assignment ::= (CONST_KW|LET_KW) IDENTIFIER COLON IDENTIFIER EQ var_value SEMICOLON?
 
-value ::= ID | STRING_LITERAL
+var_value ::= STRING_LITERAL

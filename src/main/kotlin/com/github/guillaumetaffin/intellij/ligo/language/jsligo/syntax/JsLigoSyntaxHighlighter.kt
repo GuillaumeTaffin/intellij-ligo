@@ -16,16 +16,30 @@ class JsLigoSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer = JsLigoLexerAdapter()
 
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
-        return when (tokenType) {
-            ASSIGNMENT_OPERATOR -> AttributeKeys.SEPARATOR_KEYS
-            TYPE_DEF_KW, LET_KW, CONST_KW -> AttributeKeys.KEYWORD_KEYS
-            SEMICOLON -> AttributeKeys.SEMICOLON_KEYS
-            STRING_LITERAL -> AttributeKeys.STRING_LITERAL_KEYS
-            TokenType.BAD_CHARACTER -> AttributeKeys.BAD_CHARACTER_KEYS
+        return when {
+            tokenType.isSeparator() -> AttributeKeys.SEPARATOR_KEYS
+            tokenType.isKeyWord() -> AttributeKeys.KEYWORD_KEYS
+            tokenType.isSemicolon() -> AttributeKeys.SEMICOLON_KEYS
+            tokenType.isStringLiteral() -> AttributeKeys.STRING_LITERAL_KEYS
+            tokenType.isBadCharacter() -> AttributeKeys.BAD_CHARACTER_KEYS
             else -> AttributeKeys.EMPTY_KEYS
         }
     }
 }
+
+private fun IElementType?.isBadCharacter() = this == TokenType.BAD_CHARACTER
+
+private fun IElementType?.isSemicolon() = this == SEMICOLON
+
+private fun IElementType?.isStringLiteral() = this == STRING_LITERAL
+
+private fun IElementType?.isSeparator(): Boolean = this == EQ
+
+private fun IElementType?.isKeyWord(): Boolean =
+    this == TYPE_ALIAS_KW
+            || this == LET_KW
+            || this == CONST_KW
+
 
 object Token {
     val ASSIGNMENT_SEPARATOR =

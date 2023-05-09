@@ -7,6 +7,6 @@ object JsLigoTokenSets {
 
     val WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE)
 
-    val STRING_LITERALS = TokenSet.create(JsLigoTypes.STRING_LITERAL)
+    val STRING_LITERALS: TokenSet = TokenSet.EMPTY //TokenSet.create(JsLigoTypes.STRING_LITERAL)
 
 }
