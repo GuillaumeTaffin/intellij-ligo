@@ -36,7 +36,7 @@ top_level_binding ::=
     EQ
     expression
 
-expression ::= expression_literal (AS_KW IDENTIFIER)?
+expression ::= expression_literal
 
 private expression_literal ::= string_literal
     | number_expression
