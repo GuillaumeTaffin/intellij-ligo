@@ -36,13 +36,25 @@ top_level_binding ::=
     EQ
     expression
 
-expression ::= literal_value (AS_KW IDENTIFIER)?
+expression ::= expression_literal (AS_KW IDENTIFIER)?
 
-private literal_value ::= STRING_LITERAL
-    | number_literal
+private expression_literal ::= string_literal
+    | number_expression
 
-number_literal ::= ZERO_NUMBER | NON_ZERO_NUMBER
+number_expression ::= MINUS? <<repeat_seperated_by number_literal operator>>
+
+number_literal ::= <<literal (ZERO_NUMBER | NON_ZERO_NUMBER)>>
+
+string_literal ::= <<literal STRING_PATTERN>>
+
+operator ::= PLUS | MINUS
 
 private left semicolon ::= SEMICOLON
 
 private meta repeat_seperated_by ::= (<<rule>> (<<separator>> <<rule>>)*)
+
+private meta literal ::= <<with_parens <<with_optional_type_hint <<rule>> >> >>
+
+private meta with_optional_type_hint ::= <<rule>> (AS_KW IDENTIFIER)?
+
+private meta with_parens ::= (OPENING_PARENS <<with_parens <<rule>>>> CLOSING_PARENS) | <<rule>>

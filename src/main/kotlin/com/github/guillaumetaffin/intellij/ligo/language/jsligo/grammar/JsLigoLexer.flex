@@ -34,9 +34,13 @@ EQ==
 LINE_COMMENT_START="//"
 LT=<
 GT=>
+PLUS="+"
+MINUS="-"
+OPENING_PARENS="("
+CLOSING_PARENS=")"
 IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]*
-STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
-NON_ZERO_NUMBER=-?[1-9][0-9_]*
+STRING_PATTERN=\"([^\"\r\n]|(\\\"))*\"
+NON_ZERO_NUMBER=[1-9][0-9_]*
 ZERO_NUMBER=0
 
 // keywords
@@ -48,6 +52,7 @@ AS_KW=as
 %state TYPE_ALIAS
 %state VAR_ASSIGN
 %state LINE_COMMENT
+%state EXPRESSION
 
 %%
 <YYINITIAL> {
@@ -66,13 +71,21 @@ AS_KW=as
 }
 
 <VAR_ASSIGN> {
+    {IDENTIFIER}            { return IDENTIFIER; }
+    {COLON}                 { return COLON; }
+    {EQ}                    { yybegin(EXPRESSION); return EQ; }
+}
+
+<EXPRESSION>{
     {AS_KW}                 { return AS_KW; }
     {IDENTIFIER}            { return IDENTIFIER; }
-    {EQ}                    { return EQ; }
-    {COLON}                 { return COLON; }
     {ZERO_NUMBER}           { return ZERO_NUMBER;}
     {NON_ZERO_NUMBER}       { return NON_ZERO_NUMBER; }
-    {STRING_LITERAL}        { return STRING_LITERAL; }
+    {PLUS}                  { return PLUS; }
+    {MINUS}                 { return MINUS; }
+    {OPENING_PARENS}        { return OPENING_PARENS; }
+    {CLOSING_PARENS}        { return CLOSING_PARENS; }
+    {STRING_PATTERN}        { return STRING_PATTERN; }
 }
 
 <LINE_COMMENT> {

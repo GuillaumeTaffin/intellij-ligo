@@ -33,7 +33,7 @@ private fun IElementType?.isBadCharacter() = this == TokenType.BAD_CHARACTER
 
 private fun IElementType?.isSemicolon() = this == SEMICOLON
 
-private fun IElementType?.isStringLiteral() = this == STRING_LITERAL
+private fun IElementType?.isStringLiteral() = this == STRING_PATTERN
 
 private fun IElementType?.isLineComment() =
     this == LINE_COMMENT_START
