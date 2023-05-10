@@ -27,7 +27,7 @@ class JsLigoParserDefinition : ParserDefinition {
 
     override fun getFileNodeType(): IFileElementType = FILE
 
-    override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
+    override fun getCommentTokens(): TokenSet = JsLigoTokenSets.COMMENTS
 
     override fun getStringLiteralElements(): TokenSet = JsLigoTokenSets.STRING_LITERALS
 

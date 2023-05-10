@@ -24,11 +24,20 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;
 
 EOL=\n
 WHITE_SPACE=\s+
-SEMICOLON=";"
-COLON=":"
+
+DOT=.
+COMMA=,
+TYPE_WILDCARD=_
+SEMICOLON=;
+COLON=:
 EQ==
-IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]+
+LINE_COMMENT_START="//"
+LT=<
+GT=>
+IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]*
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
+NON_ZERO_NUMBER=-?[1-9][0-9_]*
+ZERO_NUMBER=0
 
 // keywords
 TYPE_ALIAS_KW=type
@@ -38,17 +47,22 @@ AS_KW=as
 
 %state TYPE_ALIAS
 %state VAR_ASSIGN
+%state LINE_COMMENT
 
 %%
 <YYINITIAL> {
   {TYPE_ALIAS_KW}           { yybegin(TYPE_ALIAS); return TYPE_ALIAS_KW; }
   {LET_KW}                  { yybegin(VAR_ASSIGN); return LET_KW; }
   {CONST_KW}                { yybegin(VAR_ASSIGN); return CONST_KW; }
+  {LINE_COMMENT_START}      { yybegin(LINE_COMMENT); return LINE_COMMENT_START; }
 }
 
 <TYPE_ALIAS> {
     {IDENTIFIER}            { return IDENTIFIER; }
     {EQ}                    { return EQ; }
+    {LT}                    { return LT; }
+    {GT}                    { return GT; }
+    {COMMA}                 { return COMMA; }
 }
 
 <VAR_ASSIGN> {
@@ -56,7 +70,13 @@ AS_KW=as
     {IDENTIFIER}            { return IDENTIFIER; }
     {EQ}                    { return EQ; }
     {COLON}                 { return COLON; }
-    {STRING_LITERAL}        { return STRING_LITERAL;}
+    {ZERO_NUMBER}           { return ZERO_NUMBER;}
+    {NON_ZERO_NUMBER}       { return NON_ZERO_NUMBER; }
+    {STRING_LITERAL}        { return STRING_LITERAL; }
+}
+
+<LINE_COMMENT> {
+    .*                      { return COMMENT_TEXT; }
 }
 
 {SEMICOLON}                 { yybegin(YYINITIAL); return SEMICOLON; }

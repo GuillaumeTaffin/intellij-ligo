@@ -14,15 +14,35 @@
 
 }
 
-jsLigoFile ::= top_level_declarations*
+source_file ::= (<<repeat_seperated_by top_level semicolon?>> semicolon?)?
 
-private top_level_declarations ::= type_alias_declaration
-    | var_assignment
+private top_level ::=
+    top_level_binding
+    | type_alias_declaration
+    | comment
 
-type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ IDENTIFIER SEMICOLON?
+private comment ::= line_comment
 
-var_assignment ::= (CONST_KW|LET_KW) IDENTIFIER (COLON IDENTIFIER)? EQ var_value SEMICOLON?
+line_comment ::= LINE_COMMENT_START COMMENT_TEXT?
 
-var_value ::= literal_value (AS_KW IDENTIFIER)?
+type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ IDENTIFIER (type_argument_list)?
 
-literal_value ::= STRING_LITERAL
+type_argument_list ::= LT <<repeat_seperated_by IDENTIFIER COMMA>> GT
+
+top_level_binding ::=
+    (CONST_KW|LET_KW)
+    IDENTIFIER
+    (COLON IDENTIFIER)?
+    EQ
+    expression
+
+expression ::= literal_value (AS_KW IDENTIFIER)?
+
+private literal_value ::= STRING_LITERAL
+    | number_literal
+
+number_literal ::= ZERO_NUMBER | NON_ZERO_NUMBER
+
+private left semicolon ::= SEMICOLON
+
+private meta repeat_seperated_by ::= (<<rule>> (<<separator>> <<rule>>)*)
