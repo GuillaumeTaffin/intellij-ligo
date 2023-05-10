@@ -32,6 +32,8 @@ SEMICOLON=;
 COLON=:
 EQ==
 LINE_COMMENT_START="//"
+BLOCK_COMMENT_START="/*"
+BLOCK_COMMENT_END="*/"
 LT=<
 GT=>
 PLUS="+"
@@ -52,6 +54,7 @@ AS_KW=as
 %state TYPE_ALIAS
 %state VAR_ASSIGN
 %state LINE_COMMENT
+%state BLOCK_COMMENT
 %state EXPRESSION
 
 %%
@@ -60,14 +63,12 @@ AS_KW=as
   {LET_KW}                  { yybegin(VAR_ASSIGN); return LET_KW; }
   {CONST_KW}                { yybegin(VAR_ASSIGN); return CONST_KW; }
   {LINE_COMMENT_START}      { yybegin(LINE_COMMENT); return LINE_COMMENT_START; }
+  {BLOCK_COMMENT_START}     { yybegin(BLOCK_COMMENT); return BLOCK_COMMENT_START; }
 }
 
 <TYPE_ALIAS> {
     {IDENTIFIER}            { return IDENTIFIER; }
     {EQ}                    { return EQ; }
-    {LT}                    { return LT; }
-    {GT}                    { return GT; }
-    {COMMA}                 { return COMMA; }
 }
 
 <VAR_ASSIGN> {
@@ -92,6 +93,14 @@ AS_KW=as
     .*                      { return COMMENT_TEXT; }
 }
 
+<BLOCK_COMMENT> {
+    {BLOCK_COMMENT_END}     { yybegin(YYINITIAL);  return BLOCK_COMMENT_END; }
+    [^*\/]*                 { return COMMENT_TEXT; }
+}
+
+{LT}                        { return LT; }
+{GT}                        { return GT; }
+{COMMA}                     { return COMMA; }
 {SEMICOLON}                 { yybegin(YYINITIAL); return SEMICOLON; }
 {EOL}+                      { yybegin(YYINITIAL); return WHITE_SPACE; }
 {WHITE_SPACE}+              { return WHITE_SPACE; }

@@ -38,6 +38,8 @@ private fun IElementType?.isStringLiteral() = this == STRING_PATTERN
 private fun IElementType?.isLineComment() =
     this == LINE_COMMENT_START
             || this == COMMENT_TEXT
+            || this == BLOCK_COMMENT_START
+            || this == BLOCK_COMMENT_END
 
 private fun IElementType?.isNumberLiteral() = this == NUMBER_LITERAL
 

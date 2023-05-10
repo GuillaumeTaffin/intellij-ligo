@@ -21,18 +21,22 @@ private top_level ::=
     | type_alias_declaration
     | comment
 
-private comment ::= line_comment
+private comment ::= line_comment | block_comment
 
 line_comment ::= LINE_COMMENT_START COMMENT_TEXT?
 
-type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ IDENTIFIER (type_argument_list)?
+block_comment ::= BLOCK_COMMENT_START COMMENT_TEXT? BLOCK_COMMENT_END
+
+type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ type_name
+
+private type_name ::= IDENTIFIER (type_argument_list)?
 
 type_argument_list ::= LT <<repeat_seperated_by IDENTIFIER COMMA>> GT
 
 top_level_binding ::=
     (CONST_KW|LET_KW)
     IDENTIFIER
-    (COLON IDENTIFIER)?
+    (COLON type_name)?
     EQ
     expression
 
