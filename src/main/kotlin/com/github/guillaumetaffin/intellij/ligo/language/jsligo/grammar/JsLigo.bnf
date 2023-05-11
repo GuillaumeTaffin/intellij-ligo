@@ -47,11 +47,11 @@ private expression_literal ::= string_literal
 
 number_expression ::= MINUS? <<repeat_seperated_by number_literal operator>>
 
-number_literal ::= <<literal (ZERO_NUMBER | NON_ZERO_NUMBER)>>
+number_literal ::= <<literal (IDENTIFIER | ZERO_NUMBER | NON_ZERO_NUMBER)>>
 
 string_literal ::= <<literal STRING_PATTERN>>
 
-operator ::= PLUS | MINUS
+operator ::= PLUS | MINUS | MUL | DIV | MODULO
 
 private left semicolon ::= SEMICOLON
 

@@ -38,6 +38,9 @@ LT=<
 GT=>
 PLUS="+"
 MINUS="-"
+MUL="*"
+DIV="/"
+MODULO="%"
 OPENING_PARENS="("
 CLOSING_PARENS=")"
 IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]*
@@ -84,6 +87,9 @@ AS_KW=as
     {NON_ZERO_NUMBER}       { return NON_ZERO_NUMBER; }
     {PLUS}                  { return PLUS; }
     {MINUS}                 { return MINUS; }
+    {MUL}                   { return MUL; }
+    {DIV}                   { return DIV; }
+    {MODULO}                { return MODULO; }
     {OPENING_PARENS}        { return OPENING_PARENS; }
     {CLOSING_PARENS}        { return CLOSING_PARENS; }
     {STRING_PATTERN}        { return STRING_PATTERN; }
