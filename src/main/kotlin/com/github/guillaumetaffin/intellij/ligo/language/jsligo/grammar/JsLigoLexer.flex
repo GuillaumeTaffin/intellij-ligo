@@ -4,6 +4,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTypes.*;
+import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoCommentTokens.*;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 
@@ -22,10 +23,12 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;
 %type IElementType
 %unicode
 
-EOL=\n
+EOL=[\n\r]+
 WHITE_SPACE=\s+
 
-DOT=.
+DOT="."
+XOR="^"
+BANG="!"
 COMMA=,
 TYPE_WILDCARD=_
 SEMICOLON=;
@@ -34,22 +37,26 @@ EQ==
 LINE_COMMENT_START="//"
 BLOCK_COMMENT_START="/*"
 BLOCK_COMMENT_END="*/"
-LT=<
-GT=>
+LEFT_ANGLE_BRACKET=<
+RIGHT_ANGLE_BRACKET=>
+OPEN_BRACE="{"
+CLOSE_BRACE="}"
+OPEN_BRACKET="["
+CLOSE_BRACKET="]"
 PLUS="+"
 MINUS="-"
 MUL="*"
 DIV="/"
 MODULO="%"
-OPENING_PARENS="("
-CLOSING_PARENS=")"
+OPEN_PARENS="("
+CLOSE_PARENS=")"
 IDENTIFIER=@?[a-zA-Z][a-zA-Z_0-9]*
 STRING_PATTERN=\"([^\"\r\n]|(\\\"))*\"
-NON_ZERO_NUMBER=[1-9][0-9_]*
-ZERO_NUMBER=0
+NUMBER_PATTERN=[0-9][0-9_]*
 
 // keywords
 TYPE_ALIAS_KW=type
+NAMESPACE_KW=namespace
 CONST_KW=const
 LET_KW=let
 AS_KW=as
@@ -61,54 +68,50 @@ AS_KW=as
 %state EXPRESSION
 
 %%
-<YYINITIAL> {
-  {TYPE_ALIAS_KW}           { yybegin(TYPE_ALIAS); return TYPE_ALIAS_KW; }
-  {LET_KW}                  { yybegin(VAR_ASSIGN); return LET_KW; }
-  {CONST_KW}                { yybegin(VAR_ASSIGN); return CONST_KW; }
-  {LINE_COMMENT_START}      { yybegin(LINE_COMMENT); return LINE_COMMENT_START; }
-  {BLOCK_COMMENT_START}     { yybegin(BLOCK_COMMENT); return BLOCK_COMMENT_START; }
-}
-
-<TYPE_ALIAS> {
-    {IDENTIFIER}            { return IDENTIFIER; }
-    {EQ}                    { return EQ; }
-}
-
-<VAR_ASSIGN> {
-    {IDENTIFIER}            { return IDENTIFIER; }
-    {COLON}                 { return COLON; }
-    {EQ}                    { yybegin(EXPRESSION); return EQ; }
-}
-
-<EXPRESSION>{
-    {AS_KW}                 { return AS_KW; }
-    {IDENTIFIER}            { return IDENTIFIER; }
-    {ZERO_NUMBER}           { return ZERO_NUMBER;}
-    {NON_ZERO_NUMBER}       { return NON_ZERO_NUMBER; }
-    {PLUS}                  { return PLUS; }
-    {MINUS}                 { return MINUS; }
-    {MUL}                   { return MUL; }
-    {DIV}                   { return DIV; }
-    {MODULO}                { return MODULO; }
-    {OPENING_PARENS}        { return OPENING_PARENS; }
-    {CLOSING_PARENS}        { return CLOSING_PARENS; }
-    {STRING_PATTERN}        { return STRING_PATTERN; }
-}
 
 <LINE_COMMENT> {
     .*                      { return COMMENT_TEXT; }
+    {EOL}                   { yybegin(YYINITIAL); yypushback(1); return COMMENT_END; }
 }
 
 <BLOCK_COMMENT> {
-    {BLOCK_COMMENT_END}     { yybegin(YYINITIAL);  return BLOCK_COMMENT_END; }
     [^*\/]*                 { return COMMENT_TEXT; }
+    {BLOCK_COMMENT_END}     { yybegin(YYINITIAL);  return COMMENT_END; }
 }
 
-{LT}                        { return LT; }
-{GT}                        { return GT; }
-{COMMA}                     { return COMMA; }
-{SEMICOLON}                 { yybegin(YYINITIAL); return SEMICOLON; }
-{EOL}+                      { yybegin(YYINITIAL); return WHITE_SPACE; }
-{WHITE_SPACE}+              { return WHITE_SPACE; }
+<YYINITIAL> {
+   {TYPE_ALIAS_KW}           { return TYPE_ALIAS_KW; }
+   {NAMESPACE_KW}            { return NAMESPACE_KW; }
+   {EQ}                      { return EQ; }
+   {LEFT_ANGLE_BRACKET}      { return LEFT_ANGLE_BRACKET; }
+   {RIGHT_ANGLE_BRACKET}     { return RIGHT_ANGLE_BRACKET; }
+   {OPEN_BRACE}              { return OPEN_BRACE; }
+   {CLOSE_BRACE}             { return CLOSE_BRACE; }
+   {OPEN_BRACKET}            { return OPEN_BRACKET; }
+   {CLOSE_BRACKET}           { return CLOSE_BRACKET; }
+   {COMMA}                   { return COMMA; }
+   {SEMICOLON}               { return SEMICOLON; }
+   {COLON}                   { return COLON; }
+   {DOT}                     { return DOT; }
+   {BANG}                    { return BANG; }
+   {XOR}                     { return XOR; }
+   {PLUS}                    { return PLUS; }
+   {MINUS}                   { return MINUS; }
+   {MUL}                     { return MUL; }
+   {DIV}                     { return DIV; }
+   {MODULO}                  { return MODULO; }
+   {OPEN_PARENS}             { return OPEN_PARENS; }
+   {CLOSE_PARENS}            { return CLOSE_PARENS; }
+   {AS_KW}                   { return AS_KW; }
+   {LET_KW}                  { return LET_KW; }
+   {CONST_KW}                { return CONST_KW; }
+   {LINE_COMMENT_START}      { yybegin(LINE_COMMENT); return COMMENT_START; }
+   {BLOCK_COMMENT_START}     { yybegin(BLOCK_COMMENT); return COMMENT_START; }
+   {NUMBER_PATTERN}          { return NUMBER_LITERAL;}
+   {STRING_PATTERN}          { return STRING_LITERAL; }
+   {IDENTIFIER}              { return IDENTIFIER; }
+   {EOL}                     { return WHITE_SPACE; }
+   {WHITE_SPACE}             { return WHITE_SPACE; }
+}
 
 [^] { return BAD_CHARACTER; }

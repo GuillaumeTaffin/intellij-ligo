@@ -1,6 +1,7 @@
 package com.github.guillaumetaffin.intellij.ligo.language.jsligo.syntax
 
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoLexerAdapter
+import com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoCommentTokens
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTypes.*
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -21,7 +22,7 @@ class JsLigoSyntaxHighlighter : SyntaxHighlighterBase() {
             tokenType.isKeyWord() -> AttributeKeys.KEYWORD_KEYS
             tokenType.isSemicolon() -> AttributeKeys.SEMICOLON_KEYS
             tokenType.isStringLiteral() -> AttributeKeys.STRING_LITERAL_KEYS
-            tokenType.isLineComment() -> AttributeKeys.LINE_COMMENT_KEYS
+            tokenType.isComment() -> AttributeKeys.LINE_COMMENT_KEYS
             tokenType.isNumberLiteral() -> AttributeKeys.NUMBER_LITERAL_KEYS
             tokenType.isBadCharacter() -> AttributeKeys.BAD_CHARACTER_KEYS
             else -> AttributeKeys.EMPTY_KEYS
@@ -33,13 +34,12 @@ private fun IElementType?.isBadCharacter() = this == TokenType.BAD_CHARACTER
 
 private fun IElementType?.isSemicolon() = this == SEMICOLON
 
-private fun IElementType?.isStringLiteral() = this == STRING_PATTERN
+private fun IElementType?.isStringLiteral() = this == STRING_LITERAL
 
-private fun IElementType?.isLineComment() =
-    this == LINE_COMMENT_START
-            || this == COMMENT_TEXT
-            || this == BLOCK_COMMENT_START
-            || this == BLOCK_COMMENT_END
+private fun IElementType?.isComment() =
+    this == JsLigoCommentTokens.COMMENT_START
+            || this == JsLigoCommentTokens.COMMENT_TEXT
+            || this == JsLigoCommentTokens.COMMENT_END
 
 private fun IElementType?.isNumberLiteral() = this == NUMBER_LITERAL
 
@@ -50,6 +50,7 @@ private fun IElementType?.isKeyWord(): Boolean =
             || this == LET_KW
             || this == CONST_KW
             || this == AS_KW
+            || this == NAMESPACE_KW
 
 
 object Token {

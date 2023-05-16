@@ -12,53 +12,73 @@
   elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoElementType"
   tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenType"
 
+  extends(".*expr")=expr
 }
 
-source_file ::= (<<repeat_seperated_by top_level semicolon?>> semicolon?)?
+root ::= (<<repeat_seperated_by top_level_statement statement_separator?>> statement_separator?)?
 
-private top_level ::=
-    top_level_binding
-    | type_alias_declaration
-    | comment
+private top_level_statement ::= namespace_statement | type_alias_statement | var_binding_statement
 
-private comment ::= line_comment | block_comment
-
-line_comment ::= LINE_COMMENT_START COMMENT_TEXT?
-
-block_comment ::= BLOCK_COMMENT_START COMMENT_TEXT? BLOCK_COMMENT_END
-
-type_alias_declaration ::= TYPE_ALIAS_KW IDENTIFIER EQ type_name
-
-private type_name ::= IDENTIFIER (type_argument_list)?
-
-type_argument_list ::= LT <<repeat_seperated_by IDENTIFIER COMMA>> GT
-
-top_level_binding ::=
+var_binding_statement ::=
     (CONST_KW|LET_KW)
     IDENTIFIER
-    (COLON type_name)?
+    (COLON type_expression)?
     EQ
-    expression
+    expr
 
-expression ::= expression_literal
+type_alias_statement ::= TYPE_ALIAS_KW IDENTIFIER EQ type_expression
 
-private expression_literal ::= string_literal
-    | number_expression
+type_expression ::= type_ref | <<tuple type_ref>>
 
-number_expression ::= MINUS? <<repeat_seperated_by number_literal operator>>
+type_ref ::= IDENTIFIER (type_argument_list)?
 
-number_literal ::= <<literal (IDENTIFIER | ZERO_NUMBER | NON_ZERO_NUMBER)>>
+namespace_statement ::= NAMESPACE_KW IDENTIFIER <<code_block root>>
 
-string_literal ::= <<literal STRING_PATTERN>>
+type_argument_list ::= LEFT_ANGLE_BRACKET <<repeat_seperated_by IDENTIFIER COMMA>> RIGHT_ANGLE_BRACKET
 
-operator ::= PLUS | MINUS | MUL | DIV | MODULO
+meta tuple ::= <<block OPEN_BRACKET <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACKET>>
 
-private left semicolon ::= SEMICOLON
+private left statement_separator ::= SEMICOLON
 
-private meta repeat_seperated_by ::= (<<rule>> (<<separator>> <<rule>>)*)
+private meta repeat_seperated_by ::= (<<rule>> ( <<separator>> <<rule>>)*)
 
-private meta literal ::= <<with_parens <<with_optional_type_hint <<rule>> >> >>
+meta code_block ::= <<block OPEN_BRACE <<rule>> CLOSE_BRACE>>
 
-private meta with_optional_type_hint ::= <<rule>> (AS_KW IDENTIFIER)?
+private meta block ::= <<open_token>>  <<rule>>  <<close_token>>
 
-private meta with_parens ::= (OPENING_PARENS <<with_parens <<rule>>>> CLOSING_PARENS) | <<rule>>
+expr ::= conditional_group
+  | add_group
+  | boolean_group
+  | mul_group
+  | unary_group
+  | modulo_expr
+  | call_expr
+  | qualification_expr
+  | primary_group
+  {extraRoot=true}
+
+private conditional_group ::= conditional_expr
+private add_group ::= plus_expr | minus_expr
+private boolean_group ::= xor_expr
+private mul_group ::= mul_expr | div_expr
+private unary_group ::= unary_min_expr | unary_not_expr
+private primary_group ::= simple_ref_expr | literal_expr | paren_expr
+
+fake ref_expr ::= expr? DOT IDENTIFIER
+simple_ref_expr ::= IDENTIFIER (type_hint ! arg_list)? {extends=ref_expr elementType=ref_expr}
+qualification_expr ::= expr DOT IDENTIFIER type_hint? {extends=ref_expr elementType=ref_expr}
+call_expr ::= ref_expr arg_list type_hint?
+arg_list ::= OPEN_PARENS [ !CLOSE_PARENS expr  (COMMA expr) * ] CLOSE_PARENS {pin(".*")=1}
+literal_expr ::= (NUMBER_LITERAL | STRING_LITERAL) type_hint?
+unary_min_expr ::= MINUS expr
+unary_not_expr ::= BANG expr
+xor_expr ::= expr XOR expr
+conditional_expr ::= expr (LEFT_ANGLE_BRACKET | RIGHT_ANGLE_BRACKET | LEFT_ANGLE_BRACKET EQ | RIGHT_ANGLE_BRACKET EQ | EQ EQ | BANG EQ) expr
+div_expr ::= expr DIV expr
+mul_expr ::= expr MUL expr
+minus_expr ::= expr MINUS expr
+plus_expr ::= expr PLUS expr
+modulo_expr ::= expr MODULO expr
+paren_expr ::= OPEN_PARENS expr CLOSE_PARENS
+
+private type_hint ::= AS_KW type_expression
