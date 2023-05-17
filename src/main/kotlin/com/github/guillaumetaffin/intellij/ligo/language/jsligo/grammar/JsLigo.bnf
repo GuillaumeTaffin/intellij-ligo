@@ -38,15 +38,11 @@ type_argument_list ::= LEFT_ANGLE_BRACKET <<repeat_seperated_by IDENTIFIER COMMA
 
 meta tuple ::= <<block OPEN_BRACKET <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACKET>>
 
-private left statement_separator ::= SEMICOLON
-
 private meta repeat_seperated_by ::= (<<rule>> ( <<separator>> <<rule>>)*)
 
-meta code_block ::= <<block OPEN_BRACE <<rule>> CLOSE_BRACE>>
-
-private meta block ::= <<open_token>>  <<rule>>  <<close_token>>
-
-expr ::= conditional_group
+expr ::=
+  func_expr
+  | conditional_group
   | add_group
   | boolean_group
   | mul_group
@@ -54,6 +50,7 @@ expr ::= conditional_group
   | modulo_expr
   | call_expr
   | qualification_expr
+  | func_call_expr
   | primary_group
   {extraRoot=true}
 
@@ -62,11 +59,12 @@ private add_group ::= plus_expr | minus_expr
 private boolean_group ::= xor_expr
 private mul_group ::= mul_expr | div_expr
 private unary_group ::= unary_min_expr | unary_not_expr
-private primary_group ::= simple_ref_expr | literal_expr | paren_expr
+private primary_group ::= simple_ref_expr | literal_expr |  paren_expr | tuple_expr
 
 fake ref_expr ::= expr? DOT IDENTIFIER
 simple_ref_expr ::= IDENTIFIER (type_hint ! arg_list)? {extends=ref_expr elementType=ref_expr}
 qualification_expr ::= expr DOT IDENTIFIER type_hint? {extends=ref_expr elementType=ref_expr}
+func_call_expr ::= IDENTIFIER arg_list type_hint? {extends=ref_expr elementType=ref_expr}
 call_expr ::= ref_expr arg_list type_hint?
 arg_list ::= OPEN_PARENS [ !CLOSE_PARENS expr  (COMMA expr) * ] CLOSE_PARENS {pin(".*")=1}
 literal_expr ::= (NUMBER_LITERAL | STRING_LITERAL) type_hint?
@@ -80,5 +78,20 @@ minus_expr ::= expr MINUS expr
 plus_expr ::= expr PLUS expr
 modulo_expr ::= expr MODULO expr
 paren_expr ::= OPEN_PARENS expr CLOSE_PARENS
+tuple_expr ::= <<tuple expr?>>
+
+func_expr ::= func_param_list (COLON type_expression)? arrow (func_block | expr)
+func_param_list ::= OPEN_PARENS [ !CLOSE_PARENS func_param  (COMMA func_param) * ] CLOSE_PARENS
+func_param ::= (IDENTIFIER | WILDCARD) COLON type_expression
+func_block ::= OPEN_BRACE (func_statement statement_separator?)* CLOSE_BRACE {pin(".*")=1}
+private func_statement ::= (type_alias_statement | var_binding_statement | return_statement)
+arrow ::= EQ RIGHT_ANGLE_BRACKET
+return_statement ::= RETURN_KW expr
 
 private type_hint ::= AS_KW type_expression
+
+meta code_block ::= <<block OPEN_BRACE <<rule>> CLOSE_BRACE>>
+
+private meta block ::= <<open_token>>  <<rule>>  <<close_token>>
+
+private left statement_separator ::= SEMICOLON

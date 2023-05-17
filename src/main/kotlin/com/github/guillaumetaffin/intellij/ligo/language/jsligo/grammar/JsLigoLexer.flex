@@ -30,9 +30,9 @@ DOT="."
 XOR="^"
 BANG="!"
 COMMA=,
-TYPE_WILDCARD=_
+WILDCARD=_
 SEMICOLON=;
-COLON=:
+COLON=":"
 EQ==
 LINE_COMMENT_START="//"
 BLOCK_COMMENT_START="/*"
@@ -60,6 +60,7 @@ NAMESPACE_KW=namespace
 CONST_KW=const
 LET_KW=let
 AS_KW=as
+RETURN_KW=return
 
 %state TYPE_ALIAS
 %state VAR_ASSIGN
@@ -71,18 +72,19 @@ AS_KW=as
 
 <LINE_COMMENT> {
     .*                      { return COMMENT_TEXT; }
-    {EOL}                   { yybegin(YYINITIAL); yypushback(1); return COMMENT_END; }
+    {EOL}                   { yybegin(YYINITIAL); return COMMENT_END; }
 }
 
 <BLOCK_COMMENT> {
     [^*\/]*                 { return COMMENT_TEXT; }
-    {BLOCK_COMMENT_END}     { yybegin(YYINITIAL);  return COMMENT_END; }
+    {BLOCK_COMMENT_END}     { yybegin(YYINITIAL); return COMMENT_END; }
 }
 
 <YYINITIAL> {
    {TYPE_ALIAS_KW}           { return TYPE_ALIAS_KW; }
    {NAMESPACE_KW}            { return NAMESPACE_KW; }
    {EQ}                      { return EQ; }
+   {WILDCARD}                { return WILDCARD; }
    {LEFT_ANGLE_BRACKET}      { return LEFT_ANGLE_BRACKET; }
    {RIGHT_ANGLE_BRACKET}     { return RIGHT_ANGLE_BRACKET; }
    {OPEN_BRACE}              { return OPEN_BRACE; }
@@ -105,6 +107,7 @@ AS_KW=as
    {AS_KW}                   { return AS_KW; }
    {LET_KW}                  { return LET_KW; }
    {CONST_KW}                { return CONST_KW; }
+   {RETURN_KW}               { return RETURN_KW; }
    {LINE_COMMENT_START}      { yybegin(LINE_COMMENT); return COMMENT_START; }
    {BLOCK_COMMENT_START}     { yybegin(BLOCK_COMMENT); return COMMENT_START; }
    {NUMBER_PATTERN}          { return NUMBER_LITERAL;}

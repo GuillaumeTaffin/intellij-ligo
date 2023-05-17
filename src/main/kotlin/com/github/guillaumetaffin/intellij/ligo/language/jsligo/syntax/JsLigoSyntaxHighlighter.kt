@@ -51,6 +51,7 @@ private fun IElementType?.isKeyWord(): Boolean =
             || this == CONST_KW
             || this == AS_KW
             || this == NAMESPACE_KW
+            || this == RETURN_KW
 
 
 object Token {
