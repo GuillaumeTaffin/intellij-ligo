@@ -22,7 +22,7 @@ private top_level_statement ::= namespace_statement | type_alias_statement | var
 
 var_binding_statement ::=
     (CONST_KW|LET_KW)
-    IDENTIFIER
+    composed_id
     (COLON typexpr)?
     EQ
     expr
@@ -33,17 +33,23 @@ typexpr ::=
     ref_typexpr
     | tuple_typexpr
     | record_typexpr
+    | func_def_typexpr
 
 ref_typexpr ::= IDENTIFIER (type_argument_list)?
 tuple_typexpr ::= <<tuple ref_typexpr>>
 record_typexpr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_def  (COMMA record_field_def) * ] CLOSE_BRACE
 record_field_def ::= IDENTIFIER COLON typexpr
+func_def_typexpr ::= func_def_param_list arrow typexpr
+func_def_param_list ::= OPEN_PARENS [ !CLOSE_PARENS func_def_param  (COMMA func_def_param) * ] CLOSE_PARENS
+func_def_param ::= (IDENTIFIER) COLON typexpr
 
 namespace_statement ::= NAMESPACE_KW IDENTIFIER <<code_block root>>
 
 type_argument_list ::= LEFT_ANGLE_BRACKET <<repeat_seperated_by IDENTIFIER COMMA>> RIGHT_ANGLE_BRACKET
 
 meta tuple ::= <<block OPEN_BRACKET <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACKET>>
+
+meta record ::= <<block OPEN_BRACE <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACE>>
 
 private meta repeat_seperated_by ::= (<<rule>> ( <<separator>> <<rule>>)*)
 
@@ -90,9 +96,11 @@ record_expr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_expr  (COMMA record_field
 record_field_expr ::= (IDENTIFIER COLON expr) | spread_expr
 spread_expr ::= SPREAD_OP expr
 
-func_expr ::= func_param_list (COLON typexpr)? arrow (expr | func_block)
+func_expr ::= type_argument_list? func_param_list (COLON typexpr)? arrow (expr | func_block)
 func_param_list ::= OPEN_PARENS [ !CLOSE_PARENS func_param  (COMMA func_param) * ] CLOSE_PARENS
-func_param ::= (IDENTIFIER | WILDCARD) COLON typexpr
+func_param ::= composed_id (COLON typexpr)?
+composed_id ::= (simple_id | <<tuple simple_id>> | <<record simple_id>>)
+private simple_id ::= (IDENTIFIER | WILDCARD)
 func_block ::= OPEN_BRACE (func_statement statement_separator?)* CLOSE_BRACE {pin(".*")=1}
 private func_statement ::= (type_alias_statement | var_binding_statement | return_statement)
 arrow ::= EQ RIGHT_ANGLE_BRACKET
