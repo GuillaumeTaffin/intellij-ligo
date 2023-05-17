@@ -12,6 +12,7 @@
   elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoElementType"
   tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.psi.JsLigoTokenType"
 
+  extends(".*typexpr")=typexpr
   extends(".*expr")=expr
 }
 
@@ -22,15 +23,21 @@ private top_level_statement ::= namespace_statement | type_alias_statement | var
 var_binding_statement ::=
     (CONST_KW|LET_KW)
     IDENTIFIER
-    (COLON type_expression)?
+    (COLON typexpr)?
     EQ
     expr
 
-type_alias_statement ::= TYPE_ALIAS_KW IDENTIFIER EQ type_expression
+type_alias_statement ::= TYPE_ALIAS_KW IDENTIFIER EQ typexpr
 
-type_expression ::= type_ref | <<tuple type_ref>>
+typexpr ::=
+    ref_typexpr
+    | tuple_typexpr
+    | record_typexpr
 
-type_ref ::= IDENTIFIER (type_argument_list)?
+ref_typexpr ::= IDENTIFIER (type_argument_list)?
+tuple_typexpr ::= <<tuple ref_typexpr>>
+record_typexpr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_def  (COMMA record_field_def) * ] CLOSE_BRACE
+record_field_def ::= IDENTIFIER COLON typexpr
 
 namespace_statement ::= NAMESPACE_KW IDENTIFIER <<code_block root>>
 
@@ -59,7 +66,7 @@ private add_group ::= plus_expr | minus_expr
 private boolean_group ::= xor_expr
 private mul_group ::= mul_expr | div_expr
 private unary_group ::= unary_min_expr | unary_not_expr
-private primary_group ::= simple_ref_expr | literal_expr |  paren_expr | tuple_expr
+private primary_group ::= simple_ref_expr | literal_expr |  paren_expr | tuple_expr | record_expr
 
 fake ref_expr ::= expr? DOT IDENTIFIER
 simple_ref_expr ::= IDENTIFIER (type_hint ! arg_list)? {extends=ref_expr elementType=ref_expr}
@@ -78,17 +85,20 @@ minus_expr ::= expr MINUS expr
 plus_expr ::= expr PLUS expr
 modulo_expr ::= expr MODULO expr
 paren_expr ::= OPEN_PARENS expr CLOSE_PARENS
-tuple_expr ::= <<tuple expr?>>
+tuple_expr ::= <<tuple (expr | spread_expr)?>>
+record_expr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_expr  (COMMA record_field_expr) * ] CLOSE_BRACE
+record_field_expr ::= (IDENTIFIER COLON expr) | spread_expr
+spread_expr ::= SPREAD_OP expr
 
-func_expr ::= func_param_list (COLON type_expression)? arrow (func_block | expr)
+func_expr ::= func_param_list (COLON typexpr)? arrow (expr | func_block)
 func_param_list ::= OPEN_PARENS [ !CLOSE_PARENS func_param  (COMMA func_param) * ] CLOSE_PARENS
-func_param ::= (IDENTIFIER | WILDCARD) COLON type_expression
+func_param ::= (IDENTIFIER | WILDCARD) COLON typexpr
 func_block ::= OPEN_BRACE (func_statement statement_separator?)* CLOSE_BRACE {pin(".*")=1}
 private func_statement ::= (type_alias_statement | var_binding_statement | return_statement)
 arrow ::= EQ RIGHT_ANGLE_BRACKET
 return_statement ::= RETURN_KW expr
 
-private type_hint ::= AS_KW type_expression
+private type_hint ::= AS_KW typexpr
 
 meta code_block ::= <<block OPEN_BRACE <<rule>> CLOSE_BRACE>>
 

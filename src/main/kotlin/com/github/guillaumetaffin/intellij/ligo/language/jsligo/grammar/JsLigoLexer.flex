@@ -26,6 +26,7 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;
 EOL=[\n\r]+
 WHITE_SPACE=\s+
 
+SPREAD="..."
 DOT="."
 XOR="^"
 BANG="!"
@@ -81,6 +82,7 @@ RETURN_KW=return
 }
 
 <YYINITIAL> {
+   {SPREAD}                  { return SPREAD_OP; }
    {TYPE_ALIAS_KW}           { return TYPE_ALIAS_KW; }
    {NAMESPACE_KW}            { return NAMESPACE_KW; }
    {EQ}                      { return EQ; }
