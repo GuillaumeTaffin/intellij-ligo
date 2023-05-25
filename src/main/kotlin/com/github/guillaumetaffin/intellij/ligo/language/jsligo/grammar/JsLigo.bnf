@@ -37,7 +37,7 @@ typexpr ::=
 
 ref_typexpr ::= IDENTIFIER (type_argument_list)?
 tuple_typexpr ::= <<tuple ref_typexpr>>
-record_typexpr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_def  (COMMA record_field_def) * ] CLOSE_BRACE
+record_typexpr ::= <<record record_field_def>>
 record_field_def ::= IDENTIFIER COLON typexpr
 func_def_typexpr ::= func_def_param_list arrow typexpr
 func_def_param_list ::= OPEN_PARENS [ !CLOSE_PARENS func_def_param  (COMMA func_def_param) * ] CLOSE_PARENS
@@ -49,7 +49,7 @@ type_argument_list ::= LEFT_ANGLE_BRACKET <<repeat_seperated_by IDENTIFIER COMMA
 
 meta tuple ::= <<block OPEN_BRACKET <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACKET>>
 
-meta record ::= <<block OPEN_BRACE <<repeat_seperated_by <<rule>> COMMA>> CLOSE_BRACE>>
+meta record ::= OPEN_BRACE [ !CLOSE_BRACE <<rule>>  (COMMA <<rule>>) * ] CLOSE_BRACE
 
 private meta repeat_seperated_by ::= (<<rule>> ( <<separator>> <<rule>>)*)
 
@@ -75,9 +75,9 @@ private unary_group ::= unary_min_expr | unary_not_expr
 private primary_group ::= simple_ref_expr | literal_expr |  paren_expr | tuple_expr | record_expr
 
 fake ref_expr ::= expr? DOT IDENTIFIER
-simple_ref_expr ::= IDENTIFIER (type_hint ! arg_list)? {extends=ref_expr elementType=ref_expr}
+simple_ref_expr ::= IDENTIFIER (type_hint !arg_list)? {extends=ref_expr elementType=ref_expr}
 qualification_expr ::= expr DOT IDENTIFIER type_hint? {extends=ref_expr elementType=ref_expr}
-func_call_expr ::= IDENTIFIER arg_list type_hint? {extends=ref_expr elementType=ref_expr}
+func_call_expr ::= expr arg_list type_hint?
 call_expr ::= ref_expr arg_list type_hint?
 arg_list ::= OPEN_PARENS [ !CLOSE_PARENS expr  (COMMA expr) * ] CLOSE_PARENS {pin(".*")=1}
 literal_expr ::= (NUMBER_LITERAL | STRING_LITERAL) type_hint?
@@ -92,7 +92,7 @@ plus_expr ::= expr PLUS expr
 modulo_expr ::= expr MODULO expr
 paren_expr ::= OPEN_PARENS expr CLOSE_PARENS
 tuple_expr ::= <<tuple (expr | spread_expr)?>>
-record_expr ::= OPEN_BRACE [ !CLOSE_BRACE record_field_expr  (COMMA record_field_expr) * ] CLOSE_BRACE
+record_expr ::= <<record record_field_expr>>
 record_field_expr ::= (IDENTIFIER COLON expr) | spread_expr
 spread_expr ::= SPREAD_OP expr
 
