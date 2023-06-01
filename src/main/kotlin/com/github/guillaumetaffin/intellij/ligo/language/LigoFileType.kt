@@ -1,19 +1,19 @@
-package com.github.guillaumetaffin.intellij.ligo.language.jsligo
+package com.github.guillaumetaffin.intellij.ligo.language
 
 import com.github.guillaumetaffin.intellij.ligo.language.common.LigoIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class JsLigoFileType: LanguageFileType(JsLigoLanguage.INSTANCE) {
+class LigoFileType: LanguageFileType(LigoLanguage.INSTANCE) {
 
     companion object {
         @JvmStatic
-        val INSTANCE = JsLigoFileType()
+        val INSTANCE = LigoFileType()
     }
 
-    override fun getName(): String = "JsLigo File"
+    override fun getName(): String = "Ligo File"
 
-    override fun getDescription(): String = "JsLigo language file"
+    override fun getDescription(): String = "Ligo language file"
 
     override fun getDefaultExtension(): String = "jsligo"
 

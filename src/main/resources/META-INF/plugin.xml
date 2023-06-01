@@ -5,31 +5,80 @@
     <vendor>guillaumetaffin</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-
-    <resource-bundle>messages.MyBundle</resource-bundle>
+    <depends>org.jetbrains.plugins.textmate</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.guillaumetaffin.intellij.ligo.toolWindow.MyToolWindowFactory"
-                    id="MyToolWindow"/>
 
         <fileType
-                name="JsLigo File"
-                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoFileType"
+                name="Ligo File"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.LigoFileType"
                 fieldName="INSTANCE"
-                language="JsLigo"
-                extensions="jsligo"/>
+                language="Ligo"
+                extensions="jsligo;mligo"/>
 
-        <lang.parserDefinition
-                language="JsLigo"
-                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParserDefinition"/>
+        <editorHighlighterProvider
+                filetype="Ligo File"
+                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateEditorHighlighterProvider"/>
 
         <lang.syntaxHighlighterFactory
-                language="JsLigo"
-                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.syntax.JsLigoSyntaxHighlighterFactory"/>
+                language="Ligo"
+                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateSyntaxHighlighterFactory"/>
+
+        <!--suppress PluginXmlValidity -->
+        <preloadingActivity implementation="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity" id="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"/>
+
+        <!-- register intellijLanguageClient as a Service OR as a plugin component (see readme)... -->
+        <applicationService serviceImplementation="org.wso2.lsp4intellij.IntellijLanguageClient"/>
+
+        <!-- register a listener on editor events, required for lsp file sync -->
+        <editorFactoryListener implementation="org.wso2.lsp4intellij.listeners.LSPEditorListener"/>
+        <fileDocumentManagerListener implementation="org.wso2.lsp4intellij.listeners.LSPFileDocumentManagerListener"/>
+
+        <!-- for displaying notifications by lsp -->
+        <notificationGroup id="lsp" displayType="STICKY_BALLOON"/>
+
+        <!-- for displaying the statusbar icon -->
+        <statusBarWidgetFactory implementation="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                id="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                order="first" />
+
+        <!-- needed for completion -->
+        <completion.contributor implementationClass="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
+                                id="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
+                                language="Ligo"/>
+        <!-- needed for completion as well as signature help -->
+        <typedHandler implementation="org.wso2.lsp4intellij.listeners.LSPTypedHandler"
+                      id="LSPTypedHandler"/>
+
+        <!-- needed for code diagnostics -->
+        <externalAnnotator id="LSPAnnotator" language="Ligo"
+                           implementationClass="com.github.guillaumetaffin.intellij.ligo.language.lsp.DiagnosticsAnnotator"/>
+
+        <!-- needed for Workspace Symbols -->
+        <gotoSymbolContributor implementation="org.wso2.lsp4intellij.contributors.symbol.LSPSymbolContributor"
+                               id="LSPSymbolContributor"/>
+
+        <!-- needed for renaming -->
+        <renameHandler implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameHandler" id="LSPRenameHandler" order="first"/>
+
+        <renamePsiElementProcessor implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameProcessor" id="LSPRenameProcessor" order="first"/>
     </extensions>
 
+    <actions>
+        <!-- needed for hover -->
+        <action id="org.intellij.sdk.action.QuickDocAction" class="org.wso2.lsp4intellij.actions.LSPQuickDocAction"/>
+
+        <!-- needed for find references -->
+        <action class="org.wso2.lsp4intellij.actions.LSPReferencesAction" id="LSPFindUsages">
+            <keyboard-shortcut first-keystroke="shift alt F7" keymap="$default"/>
+        </action>
+
+    </actions>
+
     <applicationListeners>
-        <listener class="com.github.guillaumetaffin.intellij.ligo.listeners.MyFrameStateListener"
-                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="org.wso2.lsp4intellij.listeners.VFSListener"
+                  topic="com.intellij.openapi.vfs.VirtualFileListener"/>
+        <listener class="org.wso2.lsp4intellij.listeners.LSPProjectManagerListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>
