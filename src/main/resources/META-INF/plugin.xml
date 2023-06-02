@@ -16,6 +16,10 @@
                 language="Ligo"
                 extensions="jsligo;mligo"/>
 
+        <lang.parserDefinition
+                language="Ligo"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.parser.LigoParserDefinition"/>
+
         <editorHighlighterProvider
                 filetype="Ligo File"
                 implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateEditorHighlighterProvider"/>
@@ -25,7 +29,8 @@
                 implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateSyntaxHighlighterFactory"/>
 
         <!--suppress PluginXmlValidity -->
-        <preloadingActivity implementation="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity" id="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"/>
+        <preloadingActivity implementation="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"
+                            id="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"/>
 
         <!-- register intellijLanguageClient as a Service OR as a plugin component (see readme)... -->
         <applicationService serviceImplementation="org.wso2.lsp4intellij.IntellijLanguageClient"/>
@@ -40,7 +45,7 @@
         <!-- for displaying the statusbar icon -->
         <statusBarWidgetFactory implementation="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
                                 id="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
-                                order="first" />
+                                order="first"/>
 
         <!-- needed for completion -->
         <completion.contributor implementationClass="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
@@ -51,7 +56,7 @@
                       id="LSPTypedHandler"/>
 
         <!-- needed for code diagnostics -->
-        <externalAnnotator id="LSPAnnotator" language="Ligo"
+        <externalAnnotator language="Ligo"
                            implementationClass="com.github.guillaumetaffin.intellij.ligo.language.lsp.DiagnosticsAnnotator"/>
 
         <!-- needed for Workspace Symbols -->
@@ -59,9 +64,11 @@
                                id="LSPSymbolContributor"/>
 
         <!-- needed for renaming -->
-        <renameHandler implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameHandler" id="LSPRenameHandler" order="first"/>
+        <renameHandler implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameHandler" id="LSPRenameHandler"
+                       order="first"/>
 
-        <renamePsiElementProcessor implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameProcessor" id="LSPRenameProcessor" order="first"/>
+        <renamePsiElementProcessor implementation="org.wso2.lsp4intellij.contributors.rename.LSPRenameProcessor"
+                                   id="LSPRenameProcessor" order="first"/>
     </extensions>
 
     <actions>

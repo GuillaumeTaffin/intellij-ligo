@@ -1,0 +1,25 @@
+{
+  parserClass="com.github.guillaumetaffin.intellij.ligo.language.parser.LigoParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Ligo"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.guillaumetaffin.intellij.ligo.language.parser.psi"
+  psiImplPackage="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.impl"
+
+  elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTypes"
+  elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoElementType"
+  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTokenType"
+
+  tokens=[
+    WHITE_SPACE="regexp:\s"
+    CHARACTER="regexp:\S"
+  ]
+}
+
+ligoFile ::= (text | white_space)*
+
+white_space ::= WHITE_SPACE +
+
+text ::= CHARACTER +

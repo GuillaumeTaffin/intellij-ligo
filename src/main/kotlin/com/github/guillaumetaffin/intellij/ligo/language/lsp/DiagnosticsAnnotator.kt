@@ -5,6 +5,7 @@ import com.intellij.lang.annotation.ExternalAnnotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import org.eclipse.lsp4j.Diagnostic
@@ -14,7 +15,7 @@ import org.eclipse.lsp4j.Range
 import org.wso2.lsp4intellij.editor.EditorEventManagerBase
 
 
-class DiagnosticsAnnotator : ExternalAnnotator<Editor, Editor>() {
+class DiagnosticsAnnotator : ExternalAnnotator<Editor, Editor>(), DumbAware {
 
     override fun collectInformation(file: PsiFile, editor: Editor, hasErrors: Boolean): Editor {
         return editor

@@ -4,7 +4,7 @@ import com.github.guillaumetaffin.intellij.ligo.language.common.LigoIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class LigoFileType: LanguageFileType(LigoLanguage.INSTANCE) {
+class LigoFileType : LanguageFileType(LigoLanguage.INSTANCE) {
 
     companion object {
         @JvmStatic
