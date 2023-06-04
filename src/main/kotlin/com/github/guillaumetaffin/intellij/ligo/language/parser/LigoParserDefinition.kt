@@ -22,7 +22,7 @@ class LigoParserDefinition : TextMateParserDefinition() {
     }
 
     override fun createLexer(project: Project): Lexer {
-        val textmateService = project.service<TextMateService>()
+        val textmateService = service<TextMateService>()
         val languageDescriptor = textmateService.getLanguageDescriptorByExtension("jsligo") ?: return EmptyLexer()
 
         return TextMateHighlightingLexer(
