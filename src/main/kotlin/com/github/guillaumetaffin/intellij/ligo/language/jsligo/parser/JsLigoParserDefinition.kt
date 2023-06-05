@@ -1,6 +1,7 @@
 package com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser
 
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoLanguage
+import com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.JsLigoLexerAdapter
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoFile
 import com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTypes
 import com.intellij.lang.ASTNode

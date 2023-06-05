@@ -24,9 +24,9 @@
         <!--                filetype="JsLigo File"-->
         <!--                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateEditorHighlighterProvider"/>-->
 
-        <!--        <lang.syntaxHighlighterFactory-->
-        <!--                language="JsLigo"-->
-        <!--                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateSyntaxHighlighterFactory"/>-->
+        <lang.syntaxHighlighterFactory
+                language="JsLigo"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.highlighting.JsLigoSyntaxHighlighterFactory"/>
 
         <!--suppress PluginXmlValidity -->
         <preloadingActivity implementation="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"

@@ -10,7 +10,13 @@
 
   elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTypes"
   elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoElementType"
-  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTokenType"
+  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.JsLigoTokenType"
+
+  parserImports=[
+    "static com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.Tokens.*"
+  ]
+
+  generateTokens=false
 
   tokens=[
     CONST="const"
