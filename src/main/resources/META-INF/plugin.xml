@@ -10,23 +10,23 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <fileType
-                name="Ligo File"
-                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.LigoFileType"
+                name="JsLigo File"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoFileType"
                 fieldName="INSTANCE"
-                language="Ligo"
-                extensions="jsligo;mligo"/>
+                language="JsLigo"
+                extensions="jsligo"/>
 
         <lang.parserDefinition
-                language="Ligo"
-                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.parser.LigoParserDefinition"/>
+                language="JsLigo"
+                implementationClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParserDefinition"/>
 
-        <editorHighlighterProvider
-                filetype="Ligo File"
-                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateEditorHighlighterProvider"/>
+        <!--        <editorHighlighterProvider-->
+        <!--                filetype="JsLigo File"-->
+        <!--                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateEditorHighlighterProvider"/>-->
 
-        <lang.syntaxHighlighterFactory
-                language="Ligo"
-                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateSyntaxHighlighterFactory"/>
+        <!--        <lang.syntaxHighlighterFactory-->
+        <!--                language="JsLigo"-->
+        <!--                implementationClass="org.jetbrains.plugins.textmate.language.syntax.highlighting.TextMateSyntaxHighlighterFactory"/>-->
 
         <!--suppress PluginXmlValidity -->
         <preloadingActivity implementation="com.github.guillaumetaffin.intellij.ligo.language.lsp.LspPreloadingActivity"
@@ -50,13 +50,13 @@
         <!-- needed for completion -->
         <completion.contributor implementationClass="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
                                 id="org.wso2.lsp4intellij.contributors.LSPCompletionContributor"
-                                language="Ligo"/>
+                                language="JsLigo"/>
         <!-- needed for completion as well as signature help -->
         <typedHandler implementation="org.wso2.lsp4intellij.listeners.LSPTypedHandler"
                       id="LSPTypedHandler"/>
 
         <!-- needed for code diagnostics -->
-        <externalAnnotator language="Ligo"
+        <externalAnnotator language="JsLigo"
                            implementationClass="com.github.guillaumetaffin.intellij.ligo.language.lsp.DiagnosticsAnnotator"/>
 
         <!-- needed for Workspace Symbols -->

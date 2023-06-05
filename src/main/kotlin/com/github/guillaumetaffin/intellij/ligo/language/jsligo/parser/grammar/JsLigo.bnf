@@ -1,16 +1,16 @@
 {
-  parserClass="com.github.guillaumetaffin.intellij.ligo.language.parser.LigoParser"
+  parserClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParser"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
-  psiClassPrefix="Ligo"
+  psiClassPrefix="JsLigo"
   psiImplClassSuffix="Impl"
-  psiPackage="com.github.guillaumetaffin.intellij.ligo.language.parser.psi"
-  psiImplPackage="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.impl"
+  psiPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi"
+  psiImplPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.impl"
 
-  elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTypes"
-  elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoElementType"
-  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTokenType"
+  elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTypes"
+  elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoElementType"
+  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTokenType"
 
   tokens=[
     CONST="const"

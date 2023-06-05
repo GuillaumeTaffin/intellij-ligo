@@ -1,22 +1,22 @@
-package com.github.guillaumetaffin.intellij.ligo.language.parser.grammar;
+package com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.grammar;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTypes.*;
+import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTypes.*;
 
 %%
 
 %{
-  public LigoLexer() {
+  public JsLigoLexer() {
     this((java.io.Reader)null);
   }
 %}
 
 %public
-%class LigoLexer
+%class JsLigoLexer
 %implements FlexLexer
 %function advance
 %type IElementType
