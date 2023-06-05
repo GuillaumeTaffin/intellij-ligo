@@ -13,13 +13,34 @@
   tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.parser.psi.LigoTokenType"
 
   tokens=[
-    WHITE_SPACE="regexp:\s"
-    CHARACTER="regexp:\S"
+    CONST="const"
+    LET="let"
+    SEMICOLON=";"
+    COLON=":"
+    EQ="="
+    NEW_LINE="regexp:[\n\r]+"
+    ID="regexp:@?[a-zA-Z][a-zA-Z_0-9]*"
+    INT_LITERAL="regexp:[0-9][0-9_]*"
+    STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
+    WHITE_SPACE="regexp:[^\S\n\r]+"
   ]
 }
 
-ligoFile ::= (text | white_space)*
+ligoFile ::= ((binding top_level_separator) +)?
 
-white_space ::= WHITE_SPACE +
+private top_level_separator ::= statement_separator | <<eof>>
 
-text ::= CHARACTER +
+statement_separator ::= NEW_LINE? ";" NEW_LINE? | NEW_LINE {name="; or new line"}
+
+private binding ::= const_binding | let_binding
+
+const_binding ::= "const" ID (":" type_ref_expr)? "=" binding_rhs
+
+let_binding ::= "let" ID (":" type_ref_expr)? "=" binding_rhs
+
+type_ref_expr ::= ID
+
+binding_rhs ::= literal_expr
+
+literal_expr ::= INT_LITERAL | STRING_LITERAL
+
