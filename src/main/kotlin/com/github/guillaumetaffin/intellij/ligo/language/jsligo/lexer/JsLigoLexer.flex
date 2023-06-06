@@ -22,10 +22,9 @@ import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.Tok
 %type IElementType
 %unicode
 
-WHITE_SPACE=[^\S\n\r]+
+WHITE_SPACE=\s+
 
-NEW_LINE=[\n\r]+
-ID=_?@?[a-zA-Z][a-zA-Z_0-9]*
+ID=_?@?([a-zA-Z][a-zA-Z_0-9]*)?
 INT_LITERAL=[0-9][0-9_]*
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
 
@@ -54,7 +53,6 @@ STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
   "true"             { return TRUE; }
   "false"            { return FALSE; }
 
-  {NEW_LINE}         { return NEW_LINE; }
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }
   {STRING_LITERAL}   { return STRING_LITERAL; }

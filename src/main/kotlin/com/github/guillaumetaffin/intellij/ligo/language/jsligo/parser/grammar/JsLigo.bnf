@@ -44,19 +44,18 @@
     BANG="!"
     TRUE="true"
     FALSE="false"
-    NEW_LINE="regexp:[\n\r]+"
-    ID="regexp:_?@?[a-zA-Z][a-zA-Z_0-9]*"
+    ID="regexp:_?@?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
-    WHITE_SPACE="regexp:[^\S\n\r]+"
+    WHITE_SPACE="regexp:\s+"
   ]
 }
 
-ligoFile ::= ((binding top_level_separator) +)?
+ligoFile ::= ((binding top_level_separator?) +)?
 
 top_level_separator ::= statement_separator | <<eof>>
 
-private left statement_separator ::= NEW_LINE? ";" NEW_LINE? | NEW_LINE {name="; or new line"}
+private left statement_separator ::= ";"{name=";"}
 
 private binding ::= const_binding | let_binding
 

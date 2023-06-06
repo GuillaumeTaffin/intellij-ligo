@@ -1,1 +1,40 @@
-const a : int = 1;
+const a : int = (((1) as int) as int) as int;
+const
+    b
+        :
+            list<int>
+                = list([1, 2]) as list<int>;
+const c : map<string, int> = Map.literal(list([["toto" as string, 2]]));
+
+const two = 1 + 1
+let to = 1
+const unaryMinus = -(1 + 2);
+const t = !1 > 0
+
+const add = () => [1];
+const aa = (_a, b) => [1];
+const ss = (a: int, b: list<int>) => [1];
+
+
+const tt : [string, int] = ["int", 2];
+const ttt : [string, int] = ["int", 4 + 2];
+
+const inv = ([a, b] : [string, int]) => [b, a];
+
+const ad = ([[a, b], c] : [[string, nat], int]) => [a, b, c];
+
+const
+ moves =
+  Map.literal(list([
+    [("tz1KqTpEZ7Yob7QbPE4Hy4Wo8fHG8LhKxZSx" as address), [1, 2]],
+    [("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address), [0, 3]]]));
+
+const _ = 45;
+const _eqw=(_, _b) => "e";
+
+let my_balance: option<move> =
+  Map.find_opt(("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address), moves);
+
+
+let [old_move, updated_map2] : [option<move>, register] =
+  Map.get_and_update ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address, Some([24, 48] as move), moves);

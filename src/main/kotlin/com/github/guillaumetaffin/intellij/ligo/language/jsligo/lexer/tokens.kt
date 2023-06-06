@@ -33,9 +33,6 @@ object Tokens {
     val LET = keyword("let")
 
     @JvmField
-    val NEW_LINE = token("NEW_LINE")
-
-    @JvmField
     val SEMICOLON = token(";", "SEMICOLON" to Colors.SEMICOLON)
 
     @JvmField
