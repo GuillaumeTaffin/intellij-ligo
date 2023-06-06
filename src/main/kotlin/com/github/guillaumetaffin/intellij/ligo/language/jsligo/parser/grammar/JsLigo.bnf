@@ -44,6 +44,8 @@
     BANG="!"
     TRUE="true"
     FALSE="false"
+    AND="&&"
+    PIPE="|"
     ID="regexp:_?@?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -88,7 +90,8 @@ private unary_value_exp_group ::=
 private composed_value_expr_group ::=
     type_qualified_value_expr
     | math_value_expr
-    | bool_value_expr
+    | comparison_value_expr
+    | boolean_value_expr
 
 private primary_value_expr_group ::=
     func_call_value_expr
@@ -127,7 +130,9 @@ type_qualified_value_expr ::= primary_value_expr_group "as" type_ref
 
 math_value_expr ::= primary_value_expr_group (math_operator primary_value_expr_group) +
 
-bool_value_expr ::= primary_value_expr_group comparison_operator primary_value_expr_group
+comparison_value_expr ::= primary_value_expr_group comparison_operator primary_value_expr_group
+
+boolean_value_expr ::= primary_value_expr_group boolean_operator primary_value_expr_group
 
 unary_minus_value_expr ::= "-" value_expr
 
@@ -136,6 +141,8 @@ unary_not_value_expr ::= "!" value_expr
 math_operator ::= "+" | "-" | "*" | "/" | "%"
 
 comparison_operator ::= "<" | "<""=" | "=""=" | ">""=" | ">"
+
+boolean_operator ::= "&&" | "|""|" | "=""=" | "!""="
 
 arrow ::= "="">"
 

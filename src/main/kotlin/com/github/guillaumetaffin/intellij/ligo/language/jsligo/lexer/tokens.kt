@@ -88,6 +88,12 @@ object Tokens {
 
     @JvmField
     val FALSE = keyword("false")
+
+    @JvmField
+    val AND = operator("&&")
+
+    @JvmField
+    val PIPE = operator("|")
 }
 
 fun token(debugName: String, keys: Array<TextAttributesKey> = arrayOf()) = JsLigoTokenType(debugName, keys)

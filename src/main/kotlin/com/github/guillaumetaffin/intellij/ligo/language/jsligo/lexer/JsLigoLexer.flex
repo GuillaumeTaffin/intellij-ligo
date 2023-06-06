@@ -52,6 +52,8 @@ STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
   "!"                { return BANG; }
   "true"             { return TRUE; }
   "false"            { return FALSE; }
+  "&&"               { return AND; }
+  "|"                { return PIPE; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }
