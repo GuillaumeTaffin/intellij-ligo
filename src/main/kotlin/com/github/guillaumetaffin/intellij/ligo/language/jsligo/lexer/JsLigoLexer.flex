@@ -27,6 +27,8 @@ WHITE_SPACE=\s+
 ID=_?@?([a-zA-Z][a-zA-Z_0-9]*)?
 INT_LITERAL=[0-9][0-9_]*
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
+LINE_COMMENT="//".*
+BLOCK_COMMENT="/*"~"*/"
 
 %%
 <YYINITIAL> {
@@ -58,6 +60,8 @@ STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }
   {STRING_LITERAL}   { return STRING_LITERAL; }
+  {LINE_COMMENT}     { return LINE_COMMENT; }
+  {BLOCK_COMMENT}    { return BLOCK_COMMENT; }
 
   {WHITE_SPACE}      { return WHITE_SPACE; }
 }

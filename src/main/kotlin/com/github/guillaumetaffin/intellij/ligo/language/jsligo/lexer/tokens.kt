@@ -4,6 +4,7 @@ import com.github.guillaumetaffin.intellij.ligo.language.jsligo.JsLigoLanguage
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.TokenSet
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Colors
 
 
@@ -94,6 +95,17 @@ object Tokens {
 
     @JvmField
     val PIPE = operator("|")
+
+    @JvmField
+    val LINE_COMMENT = token("inline comment", "LINE_COMMENT" to Colors.LINE_COMMENT)
+
+    @JvmField
+    val BLOCK_COMMENT = token("block comment", "BLOCK_COMMENT" to Colors.BLOCK_COMMENT)
+}
+
+object TokenSets {
+    val COMMENTS = TokenSet.create(Tokens.LINE_COMMENT, Tokens.BLOCK_COMMENT)
+    val STRING_LITERALS = TokenSet.create(Tokens.STRING_LITERAL)
 }
 
 fun token(debugName: String, keys: Array<TextAttributesKey> = arrayOf()) = JsLigoTokenType(debugName, keys)
