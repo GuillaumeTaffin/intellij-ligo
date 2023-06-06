@@ -18,14 +18,34 @@
 
   generateTokens=false
 
+  extends(".*type_ref")=type_ref
+  extends(".*value_expr")=value_expr
+
   tokens=[
     CONST="const"
     LET="let"
     SEMICOLON=";"
     COLON=":"
     EQ="="
+    LEFT_ANGLE_BRACKET="<"
+    RIGHT_ANGLE_BRACKET=">"
+    COMMA=","
+    OPEN_PAREN="("
+    CLOSE_PAREN=")"
+    OPEN_BRACKET="["
+    CLOSE_BRACKET="]"
+    DOT="."
+    AS="as"
+    PLUS="+"
+    MINUS="-"
+    MUL="*"
+    DIV="/"
+    MODULO="%"
+    BANG="!"
+    TRUE="true"
+    FALSE="false"
     NEW_LINE="regexp:[\n\r]+"
-    ID="regexp:@?[a-zA-Z][a-zA-Z_0-9]*"
+    ID="regexp:_?@?[a-zA-Z][a-zA-Z_0-9]*"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
     WHITE_SPACE="regexp:[^\S\n\r]+"
@@ -34,19 +54,90 @@
 
 ligoFile ::= ((binding top_level_separator) +)?
 
-private top_level_separator ::= statement_separator | <<eof>>
+top_level_separator ::= statement_separator | <<eof>>
 
-statement_separator ::= NEW_LINE? ";" NEW_LINE? | NEW_LINE {name="; or new line"}
+private left statement_separator ::= NEW_LINE? ";" NEW_LINE? | NEW_LINE {name="; or new line"}
 
 private binding ::= const_binding | let_binding
 
-const_binding ::= "const" ID (":" type_ref_expr)? "=" binding_rhs
+const_binding ::= "const" def_var_id (":" type_ref)? "=" binding_rhs
 
-let_binding ::= "let" ID (":" type_ref_expr)? "=" binding_rhs
+let_binding ::= "let" def_var_id (":" type_ref)? "=" binding_rhs
 
-type_ref_expr ::= ID
+type_ref ::=
+    simple_type_ref
+    | tuple_type_ref
 
-binding_rhs ::= literal_expr
+simple_type_ref ::= ID type_generics?
 
-literal_expr ::= INT_LITERAL | STRING_LITERAL
+tuple_type_ref ::= "[" type_ref (COMMA type_ref)* "]"
+
+type_generics ::= (LEFT_ANGLE_BRACKET type_ref (COMMA type_ref)* RIGHT_ANGLE_BRACKET)
+
+binding_rhs ::= value_expr
+
+value_expr ::=
+    func_def_value_expr
+    | unary_value_exp_group
+    | composed_value_expr_group
+    | primary_value_expr_group
+
+private unary_value_exp_group ::=
+    unary_minus_value_expr
+    | unary_not_value_expr
+
+private composed_value_expr_group ::=
+    type_qualified_value_expr
+    | math_value_expr
+    | bool_value_expr
+
+private primary_value_expr_group ::=
+    func_call_value_expr
+    | parens_value_expr
+    | tuple_value_expr
+    | var_ref_value_expr
+    | literal_value_expr
+
+func_def_value_expr ::= func_def_arg_list arrow value_expr
+
+func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
+
+func_def_arg ::= def_var_id (":" type_ref)?
+
+def_var_id ::= ID | destruct_tuple_ids
+
+destruct_tuple_ids ::= "[" def_var_id (COMMA def_var_id)* "]"
+
+func_call_value_expr ::= func_ref func_call_args
+
+func_call_args ::= "(" value_expr (COMMA value_expr)* ")"
+
+tuple_value_expr ::= "[" (value_expr (COMMA value_expr)*)? "]"
+
+literal_value_expr ::= INT_LITERAL | STRING_LITERAL | "true" | "false"
+
+var_ref_value_expr ::= ID
+
+parens_value_expr ::= "(" value_expr ")"
+
+func_ref ::= (ref_id ".")* ref_id
+
+ref_id ::= ID
+
+type_qualified_value_expr ::= primary_value_expr_group "as" type_ref
+
+math_value_expr ::= primary_value_expr_group (math_operator primary_value_expr_group) +
+
+bool_value_expr ::= primary_value_expr_group comparison_operator primary_value_expr_group
+
+unary_minus_value_expr ::= "-" value_expr
+
+unary_not_value_expr ::= "!" value_expr
+
+math_operator ::= "+" | "-" | "*" | "/" | "%"
+
+comparison_operator ::= "<" | "<""=" | "=""=" | ">""=" | ">"
+
+arrow ::= "="">"
+
 

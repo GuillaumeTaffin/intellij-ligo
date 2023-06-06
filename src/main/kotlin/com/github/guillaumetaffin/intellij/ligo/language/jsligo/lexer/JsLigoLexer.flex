@@ -25,7 +25,7 @@ import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.Tok
 WHITE_SPACE=[^\S\n\r]+
 
 NEW_LINE=[\n\r]+
-ID=@?[a-zA-Z][a-zA-Z_0-9]*
+ID=_?@?[a-zA-Z][a-zA-Z_0-9]*
 INT_LITERAL=[0-9][0-9_]*
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
 
@@ -36,6 +36,23 @@ STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
   ";"                { return SEMICOLON; }
   ":"                { return COLON; }
   "="                { return EQ; }
+  "<"                { return LEFT_ANGLE_BRACKET; }
+  ">"                { return RIGHT_ANGLE_BRACKET; }
+  ","                { return COMMA; }
+  "("                { return OPEN_PAREN; }
+  ")"                { return CLOSE_PAREN; }
+  "["                { return OPEN_BRACKET; }
+  "]"                { return CLOSE_BRACKET; }
+  "."                { return DOT; }
+  "as"               { return AS; }
+  "+"                { return PLUS; }
+  "-"                { return MINUS; }
+  "*"                { return MUL; }
+  "/"                { return DIV; }
+  "%"                { return MODULO; }
+  "!"                { return BANG; }
+  "true"             { return TRUE; }
+  "false"            { return FALSE; }
 
   {NEW_LINE}         { return NEW_LINE; }
   {ID}               { return ID; }

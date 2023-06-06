@@ -21,7 +21,7 @@ object Tokens {
     val CONST = keyword("const")
 
     @JvmField
-    val EQ = token("=", "EQ" to Colors.OPERATION_SIGN)
+    val EQ = operator("=")
 
     @JvmField
     val ID = token("ID", "ID" to Colors.IDENTIFIER)
@@ -40,6 +40,57 @@ object Tokens {
 
     @JvmField
     val STRING_LITERAL = token("STRING_LITERAL", " STRING" to Colors.STRING)
+
+    @JvmField
+    val LEFT_ANGLE_BRACKET = token("<", "LEFT_ANGLE_BRACKET" to Colors.PARENTHESES)
+
+    @JvmField
+    val RIGHT_ANGLE_BRACKET = token(">", "RIGHT_ANGLE_BRACKET" to Colors.PARENTHESES)
+
+    @JvmField
+    val COMMA = token(",", " COMMA" to Colors.COMMA)
+
+    @JvmField
+    val OPEN_PAREN = token("(", "OPEN_PAREN" to Colors.PARENTHESES)
+
+    @JvmField
+    val CLOSE_PAREN = token(")", "CLOSE_PAREN" to Colors.PARENTHESES)
+
+    @JvmField
+    val OPEN_BRACKET = token("[", "OPEN_BRACKET" to Colors.BRACKETS)
+
+    @JvmField
+    val CLOSE_BRACKET = token("]", "CLOSE_BRACKET" to Colors.BRACKETS)
+
+    @JvmField
+    val DOT = token(".", "DOT" to Colors.DOT)
+
+    @JvmField
+    val AS = keyword("as")
+
+    @JvmField
+    val PLUS = operator("+")
+
+    @JvmField
+    val MINUS = operator("-")
+
+    @JvmField
+    val MUL = operator("*")
+
+    @JvmField
+    val DIV = operator("/")
+
+    @JvmField
+    val MODULO = operator("%")
+
+    @JvmField
+    val BANG = operator("!")
+
+    @JvmField
+    val TRUE = keyword("true")
+
+    @JvmField
+    val FALSE = keyword("false")
 }
 
 fun token(debugName: String, keys: Array<TextAttributesKey> = arrayOf()) = JsLigoTokenType(debugName, keys)
@@ -47,3 +98,5 @@ fun token(debugName: String, keys: Array<TextAttributesKey> = arrayOf()) = JsLig
 fun token(debugName: String, key: Pair<String, TextAttributesKey>) = token(debugName, arrayOf(createTextAttributesKey(key.first, key.second)))
 
 fun keyword(debugName: String) = token(debugName, "KEYWORD" to Colors.KEYWORD)
+
+fun operator(debugName: String) = token(debugName, "OPERATOR" to Colors.OPERATION_SIGN)
