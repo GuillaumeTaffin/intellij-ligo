@@ -106,6 +106,7 @@ private primary_value_expr_group ::=
     func_call_value_expr
     | parens_value_expr
     | tuple_value_expr
+    | record_value_expr
     | var_ref_value_expr
     | literal_value_expr
 
@@ -127,9 +128,12 @@ record_field_alias ::= ID
 
 func_call_value_expr ::= func_ref func_call_args
 
-func_call_args ::= "(" value_expr (COMMA value_expr)* ")"
+func_call_args ::= "(" value_expr ("," value_expr)* ")"
 
-tuple_value_expr ::= "[" (value_expr (COMMA value_expr)*)? "]"
+tuple_value_expr ::= "[" (value_expr ("," value_expr)*)? "]"
+
+record_value_expr ::= "{" record_value_field_def ("," record_value_field_def) "}"
+record_value_field_def ::= record_field_name ":" value_expr
 
 literal_value_expr ::= INT_LITERAL | STRING_LITERAL | "true" | "false"
 
