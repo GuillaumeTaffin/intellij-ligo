@@ -34,6 +34,8 @@
     CLOSE_PAREN=")"
     OPEN_BRACKET="["
     CLOSE_BRACKET="]"
+    OPEN_BRACE="{"
+    CLOSE_BRACE="}"
     DOT="."
     AS="as"
     PLUS="+"
@@ -70,10 +72,15 @@ let_binding ::= "let" def_var_id (":" type_ref)? "=" binding_rhs
 type_ref ::=
     simple_type_ref
     | tuple_type_ref
+    | record_type_ref
 
 simple_type_ref ::= ID type_generics?
 
 tuple_type_ref ::= "[" type_ref (COMMA type_ref)* "]"
+
+record_type_ref ::= "{" record_field_type (COMMA record_field_type)* "}"
+
+record_field_type ::= ID ":" type_ref
 
 type_generics ::= (LEFT_ANGLE_BRACKET type_ref (COMMA type_ref)* RIGHT_ANGLE_BRACKET)
 
@@ -108,9 +115,15 @@ func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
 
 func_def_arg ::= def_var_id (":" type_ref)?
 
-def_var_id ::= ID | destruct_tuple_ids
+def_var_id ::= ID | destruct_tuple_ids | destruct_record_ids
 
 destruct_tuple_ids ::= "[" def_var_id (COMMA def_var_id)* "]"
+
+destruct_record_ids ::= "{" destruct_record_field (COMMA destruct_record_field)* "}"
+
+destruct_record_field ::= record_field_name (":" record_field_alias)?
+record_field_name ::= ID
+record_field_alias ::= ID
 
 func_call_value_expr ::= func_ref func_call_args
 

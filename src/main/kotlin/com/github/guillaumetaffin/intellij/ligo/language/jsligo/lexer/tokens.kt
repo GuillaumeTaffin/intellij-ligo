@@ -101,6 +101,12 @@ object Tokens {
 
     @JvmField
     val BLOCK_COMMENT = token("block comment", "BLOCK_COMMENT" to Colors.BLOCK_COMMENT)
+
+    @JvmField
+    val OPEN_BRACE = token("{", "OPEN_BRACE" to Colors.BRACES)
+
+    @JvmField
+    val CLOSE_BRACE = token("}", "CLOSE_BRACE" to Colors.BRACES)
 }
 
 object TokenSets {

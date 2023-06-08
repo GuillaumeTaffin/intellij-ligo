@@ -56,6 +56,8 @@ BLOCK_COMMENT="/*"~"*/"
   "false"            { return FALSE; }
   "&&"               { return AND; }
   "|"                { return PIPE; }
+  "{"                { return OPEN_BRACE; }
+  "}"                { return CLOSE_BRACE; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

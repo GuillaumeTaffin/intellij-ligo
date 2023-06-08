@@ -23,6 +23,8 @@ const inv = ([a, b] : [string, int]) => [b, a];
 
 const ad = ([[a, b], c] : [[string, nat], int]) => [a, b, c];
 
+const aaaa = ([[a, {b:int}], c] : [[string, {b:nat}], int]) => [a, b, c];
+
 const
  moves =
   Map.literal(list([
@@ -32,9 +34,9 @@ const
 const _ = 45;
 const _eqw=(_, _b) => "e";
 
-let my_balance: option<move> =
+const  my_balance =
   Map.find_opt(("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address), moves);
 
 
-let [old_move, updated_map2] : [option<move>, register] =
-  Map.get_and_update ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address, Some([24, 48] as move), moves);
+const [old_move, updated_map2]  =
+  Map.get_and_update ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address, Some([24, 48]), moves);
