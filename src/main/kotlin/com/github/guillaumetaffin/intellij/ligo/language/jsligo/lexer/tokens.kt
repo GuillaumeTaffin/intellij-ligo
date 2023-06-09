@@ -107,6 +107,9 @@ object Tokens {
 
     @JvmField
     val CLOSE_BRACE = token("}", "CLOSE_BRACE" to Colors.BRACES)
+
+    @JvmField
+    val SPREAD = operator("...")
 }
 
 object TokenSets {

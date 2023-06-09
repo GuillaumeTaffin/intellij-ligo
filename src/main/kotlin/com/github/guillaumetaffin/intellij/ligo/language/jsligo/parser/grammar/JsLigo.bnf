@@ -48,6 +48,7 @@
     FALSE="false"
     AND="&&"
     PIPE="|"
+    SPREAD="..."
     ID="regexp:_?@?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -130,14 +131,18 @@ func_call_value_expr ::= func_ref func_call_args
 
 func_call_args ::= "(" value_expr ("," value_expr)* ")"
 
-tuple_value_expr ::= "[" (value_expr ("," value_expr)*)? "]"
+tuple_value_expr ::= "[" (tuple_content_item ("," tuple_content_item)*)? "]"
+private tuple_content_item ::= value_expr | var_spreading_ref_expr
 
-record_value_expr ::= "{" record_value_field_def ("," record_value_field_def) "}"
+record_value_expr ::= "{" record_content_item ("," record_content_item) "}"
+private record_content_item ::= record_value_field_def | var_spreading_ref_expr
 record_value_field_def ::= record_field_name ":" value_expr
 
 literal_value_expr ::= INT_LITERAL | STRING_LITERAL | "true" | "false"
 
 var_ref_value_expr ::= ID
+
+var_spreading_ref_expr ::= "..." var_ref_value_expr
 
 parens_value_expr ::= "(" value_expr ")"
 
