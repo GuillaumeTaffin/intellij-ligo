@@ -113,6 +113,9 @@ object Tokens {
 
     @JvmField
     val AT = token("@", "AT" to Colors.METADATA)
+
+    @JvmField
+    val TYPE = keyword("type")
 }
 
 object TokenSets {

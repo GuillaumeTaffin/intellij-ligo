@@ -1,7 +1,0 @@
-type Set<t> = set<t>;
-
-const aa : <T>(e:T)=>T = <T>(e:T) => e;
-
-interface Toto {
-    const aa : <T>(e:T)=>T;
-}

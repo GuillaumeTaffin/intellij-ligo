@@ -60,6 +60,7 @@ BLOCK_COMMENT="/*"~"*/"
   "}"                { return CLOSE_BRACE; }
   "..."              { return SPREAD; }
   "@"                { return AT; }
+  "type"             { return TYPE; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

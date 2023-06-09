@@ -50,6 +50,7 @@
     PIPE="|"
     SPREAD="..."
     AT="@"
+    TYPE="type"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -65,7 +66,9 @@ top_level_separator ::= statement_separator | <<eof>>
 
 private left statement_separator ::= ";"{name=";"}
 
-private binding ::= const_binding | let_binding
+private binding ::= const_binding | let_binding | type_alias
+
+type_alias ::= "type" ID "=" type_ref;
 
 const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs
 
