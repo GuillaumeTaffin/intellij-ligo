@@ -49,7 +49,8 @@
     AND="&&"
     PIPE="|"
     SPREAD="..."
-    ID="regexp:_?@?([a-zA-Z][a-zA-Z_0-9]*)?"
+    AT="@"
+    ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
     LINE_COMMENT="regexp://.*"
@@ -66,20 +67,27 @@ private left statement_separator ::= ";"{name=";"}
 
 private binding ::= const_binding | let_binding
 
-const_binding ::= "const" def_var_id (":" type_ref)? "=" binding_rhs
+const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs
 
-let_binding ::= "let" def_var_id (":" type_ref)? "=" binding_rhs
+let_binding ::= annotation_list "let" def_var_id (":" type_ref)? "=" binding_rhs
+
+annotation_list ::= annotation*
+
+annotation ::= "@" ID
 
 type_ref ::=
     simple_type_ref
     | tuple_type_ref
     | record_type_ref
+    | func_type_ref
 
 simple_type_ref ::= ID type_generics?
 
 tuple_type_ref ::= "[" type_ref (COMMA type_ref)* "]"
 
 record_type_ref ::= "{" record_field_type (COMMA record_field_type)* "}"
+
+func_type_ref ::= func_def_arg_list arrow type_ref
 
 record_field_type ::= ID ":" type_ref
 
@@ -111,7 +119,7 @@ private primary_value_expr_group ::=
     | var_ref_value_expr
     | literal_value_expr
 
-func_def_value_expr ::= func_def_arg_list arrow value_expr
+func_def_value_expr ::= func_def_arg_list (":" type_ref)? arrow value_expr
 
 func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
 

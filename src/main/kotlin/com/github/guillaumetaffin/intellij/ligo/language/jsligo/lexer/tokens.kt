@@ -110,6 +110,9 @@ object Tokens {
 
     @JvmField
     val SPREAD = operator("...")
+
+    @JvmField
+    val AT = token("@", "AT" to Colors.METADATA)
 }
 
 object TokenSets {

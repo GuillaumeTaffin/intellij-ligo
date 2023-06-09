@@ -24,7 +24,7 @@ import static com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.Tok
 
 WHITE_SPACE=\s+
 
-ID=_?@?([a-zA-Z][a-zA-Z_0-9]*)?
+ID=_?([a-zA-Z][a-zA-Z_0-9]*)?
 INT_LITERAL=[0-9][0-9_]*
 STRING_LITERAL=\"([^\"\r\n]|(\\\"))*\"
 LINE_COMMENT="//".*
@@ -59,6 +59,7 @@ BLOCK_COMMENT="/*"~"*/"
   "{"                { return OPEN_BRACE; }
   "}"                { return CLOSE_BRACE; }
   "..."              { return SPREAD; }
+  "@"                { return AT; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

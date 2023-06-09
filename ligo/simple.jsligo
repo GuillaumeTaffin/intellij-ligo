@@ -40,3 +40,9 @@ const  my_balance =
 
 const [old_move, updated_map2]  =
   Map.get_and_update ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" as address, Some([24, 48]), moves);
+
+type ret = [list<operation>, int];
+
+@entry
+@toto
+const increment: (delta : int, store : int) => ret = (delta : int, store : int) : ret => [list([]), store + delta];
