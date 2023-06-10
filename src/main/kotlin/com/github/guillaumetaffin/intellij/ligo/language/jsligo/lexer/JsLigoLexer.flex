@@ -63,6 +63,8 @@ BLOCK_COMMENT="/*"~"*/"
   "type"             { return TYPE; }
   "return"           { return RETURN; }
   "namespace"        { return NAMESPACE_KW; }
+  "if"               { return IF; }
+  "else"             { return ELSE; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

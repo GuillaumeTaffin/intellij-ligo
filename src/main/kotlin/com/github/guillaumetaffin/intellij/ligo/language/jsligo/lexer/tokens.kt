@@ -122,6 +122,12 @@ object Tokens {
 
     @JvmField
     val NAMESPACE_KW = keyword("namespace")
+
+    @JvmField
+    val IF = keyword("if")
+
+    @JvmField
+    val ELSE = keyword("else")
 }
 
 object TokenSets {
