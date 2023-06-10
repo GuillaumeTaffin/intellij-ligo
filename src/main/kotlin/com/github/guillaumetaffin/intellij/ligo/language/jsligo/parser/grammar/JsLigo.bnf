@@ -70,7 +70,7 @@ private left statement_separator ::= ";"{name=";"}
 
 private top_level_statement ::= namespace | binding
 
-namespace ::= "namespace" ID "{" (top_level_statement statement_separator)* "}"
+namespace ::= "namespace" ID "{" (top_level_statement statement_separator?)* "}"
 
 private binding ::= const_binding | let_binding | type_alias
 
@@ -89,12 +89,17 @@ type_ref ::=
     | tuple_type_ref
     | record_type_ref
     | func_type_ref
+    | variant_type_ref
+    | INT_LITERAL
 
 simple_type_ref ::= ID type_generics?
 
 tuple_type_ref ::= "[" type_ref (COMMA type_ref)* "]"
 
 record_type_ref ::= "{" record_field_type (COMMA record_field_type)* "}"
+
+variant_type_ref ::= variant_type_item ("|" variant_type_item)*
+variant_type_item ::= "[" STRING_LITERAL ("," type_ref)* "]"
 
 func_type_ref ::= func_def_arg_list arrow type_ref
 
@@ -130,7 +135,7 @@ private primary_value_expr_group ::=
 
 func_def_value_expr ::= func_def_arg_list (":" type_ref)? arrow (func_body | value_expr)
 
-func_body ::= "{" (func_body_statement statement_separator?)* "}"
+func_body ::= "{" (func_body_statement statement_separator?)+ "}"
 
 private func_body_statement ::= binding | return_statement
 

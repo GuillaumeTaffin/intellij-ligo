@@ -44,11 +44,13 @@ const [old_move, updated_map2]  =
 type ret = [list<operation>, int];
 
 @entry
-@toto
 const increment: (delta : int, store : int) => ret = (delta : int, store : int) : ret => [list([]), store + delta];
 
-const decrement = (a:int) => {}
+const decrement = (a:int) => {
+    return a;
+};
 
-namespace IncDec {
-
-}
+type parameter =
+  ["Back", int]
+  | ["Claim", 2]
+  | ["Withdraw"];
