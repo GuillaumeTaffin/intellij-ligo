@@ -52,6 +52,7 @@
     AT="@"
     TYPE="type"
     RETURN="return"
+    NAMESPACE_KW="namespace"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -61,11 +62,15 @@
   ]
 }
 
-ligoFile ::= ((binding top_level_separator?) +)?
+ligoFile ::= ((top_level_statement top_level_separator?) +)?
 
 top_level_separator ::= statement_separator | <<eof>>
 
 private left statement_separator ::= ";"{name=";"}
+
+private top_level_statement ::= namespace | binding
+
+namespace ::= "namespace" ID "{" (top_level_statement statement_separator)* "}"
 
 private binding ::= const_binding | let_binding | type_alias
 

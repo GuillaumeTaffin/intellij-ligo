@@ -48,3 +48,7 @@ type ret = [list<operation>, int];
 const increment: (delta : int, store : int) => ret = (delta : int, store : int) : ret => [list([]), store + delta];
 
 const decrement = (a:int) => {}
+
+namespace IncDec {
+
+}

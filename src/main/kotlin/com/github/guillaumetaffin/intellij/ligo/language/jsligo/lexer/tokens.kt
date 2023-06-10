@@ -119,6 +119,9 @@ object Tokens {
 
     @JvmField
     val RETURN = keyword("return")
+
+    @JvmField
+    val NAMESPACE_KW = keyword("namespace")
 }
 
 object TokenSets {
