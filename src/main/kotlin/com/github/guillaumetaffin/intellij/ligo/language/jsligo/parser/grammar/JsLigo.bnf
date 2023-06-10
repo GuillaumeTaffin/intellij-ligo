@@ -51,6 +51,7 @@
     SPREAD="..."
     AT="@"
     TYPE="type"
+    RETURN="return"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -122,7 +123,13 @@ private primary_value_expr_group ::=
     | var_ref_value_expr
     | literal_value_expr
 
-func_def_value_expr ::= func_def_arg_list (":" type_ref)? arrow value_expr
+func_def_value_expr ::= func_def_arg_list (":" type_ref)? arrow (func_body | value_expr)
+
+func_body ::= "{" (func_body_statement statement_separator?)* "}"
+
+private func_body_statement ::= binding | return_statement
+
+return_statement ::="return" value_expr
 
 func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
 

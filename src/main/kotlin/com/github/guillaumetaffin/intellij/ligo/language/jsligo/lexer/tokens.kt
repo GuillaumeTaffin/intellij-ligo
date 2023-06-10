@@ -116,6 +116,9 @@ object Tokens {
 
     @JvmField
     val TYPE = keyword("type")
+
+    @JvmField
+    val RETURN = keyword("return")
 }
 
 object TokenSets {

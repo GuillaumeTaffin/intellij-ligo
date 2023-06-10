@@ -46,3 +46,5 @@ type ret = [list<operation>, int];
 @entry
 @toto
 const increment: (delta : int, store : int) => ret = (delta : int, store : int) : ret => [list([]), store + delta];
+
+const decrement = (a:int) => {}

@@ -61,6 +61,7 @@ BLOCK_COMMENT="/*"~"*/"
   "..."              { return SPREAD; }
   "@"                { return AT; }
   "type"             { return TYPE; }
+  "return"           { return RETURN; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }
