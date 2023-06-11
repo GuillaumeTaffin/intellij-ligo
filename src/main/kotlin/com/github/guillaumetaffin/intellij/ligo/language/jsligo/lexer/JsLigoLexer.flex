@@ -36,7 +36,12 @@ BLOCK_COMMENT="/*"~"*/"
   "let"              { return LET; }
   ";"                { return SEMICOLON; }
   ":"                { return COLON; }
+  "=>"               { return ARROW; }
+  "=="               { return IS_EQUAL; }
+  "!="               { return NOT_EQUAL; }
   "="                { return EQ; }
+  "<="               { return LESS_OR_EQUAL; }
+  ">="               { return GREATER_OR_EQUAL; }
   "<"                { return LEFT_ANGLE_BRACKET; }
   ">"                { return RIGHT_ANGLE_BRACKET; }
   ","                { return COMMA; }
@@ -55,6 +60,7 @@ BLOCK_COMMENT="/*"~"*/"
   "true"             { return TRUE; }
   "false"            { return FALSE; }
   "&&"               { return AND; }
+  "||"               { return OR; }
   "|"                { return PIPE; }
   "{"                { return OPEN_BRACE; }
   "}"                { return CLOSE_BRACE; }

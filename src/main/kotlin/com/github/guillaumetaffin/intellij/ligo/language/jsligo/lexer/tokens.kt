@@ -128,6 +128,24 @@ object Tokens {
 
     @JvmField
     val ELSE = keyword("else")
+
+    @JvmField
+    val LESS_OR_EQUAL = operator("<=")
+
+    @JvmField
+    val GREATER_OR_EQUAL = operator(">=")
+
+    @JvmField
+    val IS_EQUAL = operator("==")
+
+    @JvmField
+    val NOT_EQUAL = operator("!=")
+
+    @JvmField
+    val OR = operator("||")
+
+    @JvmField
+    val ARROW = operator("=>")
 }
 
 object TokenSets {

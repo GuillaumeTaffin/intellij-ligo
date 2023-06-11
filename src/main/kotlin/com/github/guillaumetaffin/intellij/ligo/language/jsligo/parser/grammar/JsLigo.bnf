@@ -27,6 +27,11 @@
     SEMICOLON=";"
     COLON=":"
     EQ="="
+    ARROW="=>"
+    LESS_OR_EQUAL="<="
+    GREATER_OR_EQUAL=">="
+    IS_EQUAL="=="
+    NOT_EQUAL="!="
     LEFT_ANGLE_BRACKET="<"
     RIGHT_ANGLE_BRACKET=">"
     COMMA=","
@@ -47,6 +52,7 @@
     TRUE="true"
     FALSE="false"
     AND="&&"
+    OR="||"
     PIPE="|"
     SPREAD="..."
     AT="@"
@@ -103,7 +109,7 @@ record_type_ref ::= "{" record_field_type (COMMA record_field_type)* "}"
 variant_type_ref ::= variant_type_item ("|" variant_type_item)*
 variant_type_item ::= "[" STRING_LITERAL ("," type_ref)* "]"
 
-func_type_ref ::= func_def_arg_list arrow type_ref
+func_type_ref ::= func_def_arg_list "=>" type_ref
 
 record_field_type ::= ID ":" type_ref
 
@@ -135,7 +141,7 @@ private primary_value_expr_group ::=
     | var_ref_value_expr
     | literal_value_expr
 
-func_def_value_expr ::= func_def_value_expr_signature arrow (code_block | value_expr)
+func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_expr)
 
 code_block ::= "{" (code_block_statement statement_separator?)+ "}"
 
@@ -154,15 +160,15 @@ func_def_arg ::= def_var_id (":" type_ref)?
 
 def_var_id ::= ID | destruct_tuple_ids | destruct_record_ids
 
-destruct_tuple_ids ::= "[" def_var_id (COMMA def_var_id)* "]"
+destruct_tuple_ids ::= "[" def_var_id ("," def_var_id)* "]"
 
-destruct_record_ids ::= "{" destruct_record_field (COMMA destruct_record_field)* "}"
+destruct_record_ids ::= "{" destruct_record_field ("," destruct_record_field)* "}"
 
 destruct_record_field ::= record_field_name (":" record_field_alias)?
 record_field_name ::= ID
 record_field_alias ::= ID
 
-nested_ref_call_value_expr ::= nested_ref func_call_args?
+nested_ref_call_value_expr ::= (nested_ref | parens_value_expr) func_call_args?
 
 func_call_args ::= "(" (value_expr ("," value_expr)*)? ")"
 
@@ -199,10 +205,6 @@ unary_not_value_expr ::= "!" value_expr
 
 math_operator ::= "+" | "-" | "*" | "/" | "%"
 
-comparison_operator ::= "<" | "<""=" | "=""=" | ">""=" | ">"
+comparison_operator ::= "<" | "<=" | "==" | ">=" | ">"
 
-boolean_operator ::= "&&" | "|""|" | "=""=" | "!""="
-
-arrow ::= "="">"
-
-
+boolean_operator ::= "&&" | "||" | "==" | "!="
