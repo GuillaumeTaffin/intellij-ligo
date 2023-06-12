@@ -44,8 +44,10 @@
     DOT="."
     AS="as"
     INC="++"
+    PLUS_EQUAL="+="
     PLUS="+"
     DEC="--"
+    MINUS_EQUAL="-="
     MINUS="-"
     MUL="*"
     DIV="/"
@@ -97,7 +99,6 @@ type_alias ::= "type" ID "=" type_ref {extends="code_block_statement"}
 const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
 
 let_binding ::= annotation_list "let" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
-re_binding ::= def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
 
 annotation_list ::= annotation*
 
@@ -170,6 +171,9 @@ code_block_statement ::=
     | for_statement
     | while_statement
     | nested_ref_call_value_expr
+
+re_binding ::= def_var_id (":" type_ref)? re_bin_operator binding_rhs {extends="code_block_statement"}
+re_bin_operator ::= "=" | "+=" | "-="
 
 return_statement ::= "return" value_expr {extends=code_block_statement}
 

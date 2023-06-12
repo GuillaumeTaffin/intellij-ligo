@@ -176,6 +176,12 @@ object Tokens {
 
     @JvmField
     val WHILE = keyword("while")
+
+    @JvmField
+    val PLUS_EQUAL = operator("+=")
+
+    @JvmField
+    val MINUS_EQUAL = operator("-=")
 }
 
 object TokenSets {

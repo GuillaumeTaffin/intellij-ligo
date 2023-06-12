@@ -53,6 +53,8 @@ BLOCK_COMMENT="/*"~"*/"
   "as"               { return AS; }
   "++"               { return INC; }
   "--"               { return DEC; }
+  "+="               { return PLUS_EQUAL; }
+  "-="               { return MINUS_EQUAL; }
   "+"                { return PLUS; }
   "-"                { return MINUS; }
   "*"                { return MUL; }
