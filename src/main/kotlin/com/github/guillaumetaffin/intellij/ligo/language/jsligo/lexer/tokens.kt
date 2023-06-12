@@ -169,10 +169,13 @@ object Tokens {
     val QUESTION_MARK = operator("?")
 
     @JvmField
-    val FOR = operator("for")
+    val FOR = keyword("for")
 
     @JvmField
-    val OF = operator("of")
+    val OF = keyword("of")
+
+    @JvmField
+    val WHILE = keyword("while")
 }
 
 object TokenSets {

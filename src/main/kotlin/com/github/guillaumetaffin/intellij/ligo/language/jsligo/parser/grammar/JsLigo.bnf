@@ -70,6 +70,7 @@
     QUESTION_MARK="?"
     FOR="for"
     OF="of"
+    WHILE="while"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -160,7 +161,14 @@ func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_e
 
 code_block ::= "{" (code_block_statement statement_separator?)+ "}"
 
-code_block_statement ::= binding | return_statement | if_else_statement | switch_statement | for_statement | nested_ref_call_value_expr
+code_block_statement ::=
+    binding
+    | return_statement
+    | if_else_statement
+    | switch_statement
+    | for_statement
+    | while_statement
+    | nested_ref_call_value_expr
 
 return_statement ::= "return" value_expr {extends=code_block_statement}
 
@@ -182,6 +190,8 @@ for_i_stop ::= value_expr
 for_i_update ::= value_expr
 
 for_each_statement ::= "for" "(" ("const" | "let") ID "of" value_expr ")" code_block {extends=code_block_statement}
+
+while_statement ::= "while" "(" value_expr ")" code_block
 
 func_def_value_expr_signature ::= ID | func_def_arg_list (":" type_ref)?
 

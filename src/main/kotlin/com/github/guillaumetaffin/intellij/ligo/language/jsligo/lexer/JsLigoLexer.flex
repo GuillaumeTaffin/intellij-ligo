@@ -80,6 +80,7 @@ BLOCK_COMMENT="/*"~"*/"
   "for"              { return FOR; }
   "of"               { return OF; }
   "?"                { return QUESTION_MARK; }
+  "while"            { return WHILE; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }
