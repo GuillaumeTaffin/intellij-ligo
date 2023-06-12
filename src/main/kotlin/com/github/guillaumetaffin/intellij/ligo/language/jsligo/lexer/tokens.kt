@@ -146,6 +146,24 @@ object Tokens {
 
     @JvmField
     val ARROW = operator("=>")
+
+    @JvmField
+    val SWITCH = keyword("switch")
+
+    @JvmField
+    val DEFAULT = keyword("default")
+
+    @JvmField
+    val CASE = keyword("case")
+
+    @JvmField
+    val BREAK = keyword("break")
+
+    @JvmField
+    val INC = operator("++")
+
+    @JvmField
+    val DEC = operator("--")
 }
 
 object TokenSets {

@@ -51,6 +51,8 @@ BLOCK_COMMENT="/*"~"*/"
   "]"                { return CLOSE_BRACKET; }
   "."                { return DOT; }
   "as"               { return AS; }
+  "++"               { return INC; }
+  "--"               { return DEC; }
   "+"                { return PLUS; }
   "-"                { return MINUS; }
   "*"                { return MUL; }
@@ -71,6 +73,10 @@ BLOCK_COMMENT="/*"~"*/"
   "namespace"        { return NAMESPACE_KW; }
   "if"               { return IF; }
   "else"             { return ELSE; }
+  "switch"           { return SWITCH; }
+  "default"          { return DEFAULT; }
+  "case"             { return CASE; }
+  "break"            { return BREAK; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

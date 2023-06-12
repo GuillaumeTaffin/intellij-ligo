@@ -43,7 +43,9 @@
     CLOSE_BRACE="}"
     DOT="."
     AS="as"
+    INC="++"
     PLUS="+"
+    DEC="--"
     MINUS="-"
     MUL="*"
     DIV="/"
@@ -61,6 +63,11 @@
     NAMESPACE_KW="namespace"
     IF="if"
     ELSE="else"
+    SWITCH="switch"
+    DEFAULT="default"
+    CASE="case"
+    BREAK="break"
+    QUESTION_MARK="?"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -80,13 +87,14 @@ private top_level_statement ::= namespace | binding
 
 namespace ::= "namespace" ID "{" (top_level_statement statement_separator?)* "}"
 
-private binding ::= const_binding | let_binding | type_alias
+private binding ::= const_binding | let_binding | re_binding | type_alias
 
-type_alias ::= "type" ID "=" type_ref;
+type_alias ::= "type" ID "=" type_ref {extends="code_block_statement"}
 
-const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs
+const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
 
-let_binding ::= annotation_list "let" def_var_id (":" type_ref)? "=" binding_rhs
+let_binding ::= annotation_list "let" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
+re_binding ::= def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
 
 annotation_list ::= annotation*
 
@@ -118,7 +126,7 @@ type_generics ::= (LEFT_ANGLE_BRACKET type_ref (COMMA type_ref)* RIGHT_ANGLE_BRA
 binding_rhs ::= value_expr
 
 value_expr ::=
-    func_def_value_expr
+    ternary_value_expr
     | unary_value_exp_group
     | composed_value_expr_group
     | primary_value_expr_group
@@ -126,6 +134,10 @@ value_expr ::=
 private unary_value_exp_group ::=
     unary_minus_value_expr
     | unary_not_value_expr
+    | prefix_inc_value_expr
+    | postfix_inc_value_expr
+    | prefix_dec_value_expr
+    | postfix_dec_value_expr
 
 private composed_value_expr_group ::=
     type_qualified_value_expr
@@ -134,7 +146,8 @@ private composed_value_expr_group ::=
     | boolean_value_expr
 
 private primary_value_expr_group ::=
-    nested_ref_call_value_expr
+    func_def_value_expr
+    | nested_ref_call_value_expr
     | parens_value_expr
     | tuple_value_expr
     | record_value_expr
@@ -145,9 +158,16 @@ func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_e
 
 code_block ::= "{" (code_block_statement statement_separator?)+ "}"
 
-code_block_statement ::= binding | return_statement | if_else_statement {extends="code_block_statement"}
+code_block_statement ::= binding | return_statement | if_else_statement | switch_statement | nested_ref_call_value_expr
 
 return_statement ::= "return" value_expr {extends=code_block_statement}
+
+switch_statement ::= "switch" parens_value_expr "{" switch_statement_body "}" {extends=code_block_statement}
+
+switch_statement_body ::= switch_case+ switch_default_case? | switch_default_case {name="switch statement should contain at least one case or default"}
+switch_case ::= "case" literal_value_expr ":" (switch_case_code_block)?
+switch_default_case ::= "default" ":" switch_case_code_block
+switch_case_code_block ::= (code_block_statement statement_separator?)+ ("break" statement_separator?)?
 
 if_else_statement ::= if_statement ("else" code_block)? {extends=code_block_statement}
 if_statement ::= "if" "(" value_expr ")" code_block {extends=code_block_statement}
@@ -175,7 +195,7 @@ func_call_args ::= "(" (value_expr ("," value_expr)*)? ")"
 tuple_value_expr ::= "[" (tuple_content_item ("," tuple_content_item)*)? "]"
 private tuple_content_item ::= value_expr | var_spreading_ref_expr
 
-record_value_expr ::= "{" record_content_item ("," record_content_item) "}"
+record_value_expr ::= "{" record_content_item ("," record_content_item)* "}"
 private record_content_item ::= record_value_field_def | var_spreading_ref_expr
 record_value_field_def ::= record_field_name ":" value_expr
 
@@ -183,7 +203,7 @@ literal_value_expr ::= INT_LITERAL | STRING_LITERAL | "true" | "false"
 
 var_ref_value_expr ::= ID
 
-var_spreading_ref_expr ::= "..." var_ref_value_expr
+var_spreading_ref_expr ::= "..." nested_ref_call_value_expr
 
 parens_value_expr ::= "(" value_expr ")"
 
@@ -191,17 +211,23 @@ nested_ref ::= (ref_id ".")* ref_id
 
 ref_id ::= ID
 
-type_qualified_value_expr ::= primary_value_expr_group "as" type_ref
+type_qualified_value_expr ::= value_expr "as" type_ref
 
-math_value_expr ::= primary_value_expr_group (math_operator primary_value_expr_group) +
+math_value_expr ::= value_expr (math_operator value_expr) +
 
-comparison_value_expr ::= primary_value_expr_group comparison_operator primary_value_expr_group
+comparison_value_expr ::= value_expr comparison_operator value_expr
 
-boolean_value_expr ::= primary_value_expr_group boolean_operator primary_value_expr_group
+boolean_value_expr ::= value_expr boolean_operator value_expr
+
+ternary_value_expr ::= value_expr "?" ternary_block_value_expr ":" ternary_block_value_expr
+private ternary_block_value_expr ::= ternary_value_expr| value_expr
 
 unary_minus_value_expr ::= "-" value_expr
-
 unary_not_value_expr ::= "!" value_expr
+prefix_inc_value_expr ::= "++" value_expr
+postfix_inc_value_expr ::= value_expr "++"
+prefix_dec_value_expr ::= "--" value_expr
+postfix_dec_value_expr ::= value_expr "--"
 
 math_operator ::= "+" | "-" | "*" | "/" | "%"
 

@@ -66,3 +66,24 @@ const compare = n => {
     return Large ();
   };
 };
+
+const quarter = (n) => {
+  let output = "";
+  switch (n) {
+  case 2: output = "two"; break;
+  default: output = "Invalid month."; break;
+    //  output = "Invalid month."
+  };
+  return output;
+}
+
+const p = {name:() => "tptp"}
+
+let x = a => {
+  const age = 25;
+  {
+   const age = 3; // does not give an error
+   return age;
+  }
+};
+
