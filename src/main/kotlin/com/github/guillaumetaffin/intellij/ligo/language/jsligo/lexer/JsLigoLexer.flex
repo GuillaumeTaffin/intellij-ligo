@@ -77,6 +77,9 @@ BLOCK_COMMENT="/*"~"*/"
   "default"          { return DEFAULT; }
   "case"             { return CASE; }
   "break"            { return BREAK; }
+  "for"              { return FOR; }
+  "of"               { return OF; }
+  "?"                { return QUESTION_MARK; }
 
   {ID}               { return ID; }
   {INT_LITERAL}      { return INT_LITERAL; }

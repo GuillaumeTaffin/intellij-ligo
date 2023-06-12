@@ -164,6 +164,15 @@ object Tokens {
 
     @JvmField
     val DEC = operator("--")
+
+    @JvmField
+    val QUESTION_MARK = operator("?")
+
+    @JvmField
+    val FOR = operator("for")
+
+    @JvmField
+    val OF = operator("of")
 }
 
 object TokenSets {

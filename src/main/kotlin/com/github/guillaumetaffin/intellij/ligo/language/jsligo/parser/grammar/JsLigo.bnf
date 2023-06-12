@@ -68,6 +68,8 @@
     CASE="case"
     BREAK="break"
     QUESTION_MARK="?"
+    FOR="for"
+    OF="of"
     ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
     INT_LITERAL="regexp:[0-9][0-9_]*"
     STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
@@ -158,7 +160,7 @@ func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_e
 
 code_block ::= "{" (code_block_statement statement_separator?)+ "}"
 
-code_block_statement ::= binding | return_statement | if_else_statement | switch_statement | nested_ref_call_value_expr
+code_block_statement ::= binding | return_statement | if_else_statement | switch_statement | for_statement | nested_ref_call_value_expr
 
 return_statement ::= "return" value_expr {extends=code_block_statement}
 
@@ -171,6 +173,15 @@ switch_case_code_block ::= (code_block_statement statement_separator?)+ ("break"
 
 if_else_statement ::= if_statement ("else" code_block)? {extends=code_block_statement}
 if_statement ::= "if" "(" value_expr ")" code_block {extends=code_block_statement}
+
+
+private for_statement ::= for_i_statement | for_each_statement
+for_i_statement ::= "for" "(" for_i_def ";" for_i_stop ";" for_i_update ")" code_block {extends=code_block_statement}
+for_i_def ::= const_binding | let_binding
+for_i_stop ::= value_expr
+for_i_update ::= value_expr
+
+for_each_statement ::= "for" "(" ("const" | "let") ID "of" value_expr ")" code_block {extends=code_block_statement}
 
 func_def_value_expr_signature ::= ID | func_def_arg_list (":" type_ref)?
 
