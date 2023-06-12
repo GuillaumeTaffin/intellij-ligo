@@ -160,7 +160,8 @@ private primary_value_expr_group ::=
 
 func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_expr)
 
-code_block ::= "{" (code_block_statement statement_separator?)+ "}"
+code_block ::= "{" code_block_content "}"
+code_block_content ::= (code_block_statement statement_separator?)+
 
 code_block_statement ::=
     binding
