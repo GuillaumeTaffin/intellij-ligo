@@ -90,7 +90,7 @@ private top_level_statement ::= namespace | binding
 
 namespace ::= "namespace" ID "{" (top_level_statement statement_separator?)* "}"
 
-private binding ::= const_binding | let_binding | re_binding | type_alias
+private binding ::= const_binding | let_binding | type_alias
 
 type_alias ::= "type" ID "=" type_ref {extends="code_block_statement"}
 
@@ -124,7 +124,7 @@ func_type_ref ::= func_def_arg_list "=>" type_ref
 
 record_field_type ::= ID ":" type_ref
 
-type_generics ::= (LEFT_ANGLE_BRACKET type_ref (COMMA type_ref)* RIGHT_ANGLE_BRACKET)
+type_generics ::= ("<" type_ref (COMMA type_ref)* ">")
 
 binding_rhs ::= value_expr
 
@@ -163,6 +163,7 @@ code_block ::= "{" (code_block_statement statement_separator?)+ "}"
 
 code_block_statement ::=
     binding
+    | re_binding
     | return_statement
     | if_else_statement
     | switch_statement
