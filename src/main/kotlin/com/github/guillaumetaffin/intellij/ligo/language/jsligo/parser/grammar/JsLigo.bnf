@@ -94,7 +94,7 @@ namespace ::= "namespace" ID "{" (top_level_statement statement_separator?)* "}"
 
 private binding ::= const_binding | let_binding | type_alias
 
-type_alias ::= "type" ID "=" type_ref {extends="code_block_statement"}
+type_alias ::= "type" ID generic_arg_types_list? "=" type_ref {extends="code_block_statement"}
 
 const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
 
@@ -199,9 +199,11 @@ for_each_statement ::= "for" "(" ("const" | "let") ID "of" value_expr ")" code_b
 
 while_statement ::= "while" "(" value_expr ")" code_block
 
-func_def_value_expr_signature ::= ID | func_def_arg_list (":" type_ref)?
+func_def_value_expr_signature ::= ID | generic_arg_types_list? func_def_arg_list (":" type_ref)?
 
 func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
+generic_arg_types_list ::= "<" generic_type_ids ">"
+generic_type_ids ::= ID ("," ID)*
 
 func_def_arg ::= def_var_id (":" type_ref)?
 
