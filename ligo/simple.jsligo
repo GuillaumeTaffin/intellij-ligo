@@ -87,3 +87,4 @@ let x = a => {
   }
 };
 
+const ki = <T>(a : list<T>) => 3;

@@ -82,9 +82,7 @@
   ]
 }
 
-ligoFile ::= ((top_level_statement top_level_separator?) +)?
-
-top_level_separator ::= statement_separator | <<eof>>
+ligoFile ::= (top_level_statement statement_separator?) *
 
 private left statement_separator ::= ";"{name=";"}
 
