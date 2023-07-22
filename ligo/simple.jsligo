@@ -50,6 +50,11 @@ const decrement = (a:int) => {
     return a;
 };
 
+@test
+const tot =  () => {
+    Test.log("neo");
+};
+
 type parameter =
   ["Back", int]
   | ["Claim", 2]
@@ -78,13 +83,5 @@ const quarter = (n) => {
 }
 
 const p = {name:() => "tptp"}
-
-let x = a => {
-  const age = 25;
-  {
-   const age = 3; // does not give an error
-   return age;
-  }
-};
 
 const ki = <T>(a : list<T>) => 3;
