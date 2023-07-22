@@ -1,0 +1,263 @@
+{
+  parserClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.JsLigoParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="JsLigo"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi"
+  psiImplPackage="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.impl"
+
+  elementTypeHolderClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoTypes"
+  elementTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.parser.psi.JsLigoElementType"
+  tokenTypeClass="com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.JsLigoTokenType"
+
+  parserImports=[
+    "static com.github.guillaumetaffin.intellij.ligo.language.jsligo.lexer.Tokens.*"
+  ]
+
+  generateTokens=false
+
+  extends(".*type_ref")=type_ref
+  extends(".*value_expr")=value_expr
+
+  tokens=[
+    CONST="const"
+    LET="let"
+    SEMICOLON=";"
+    COLON=":"
+    EQ="="
+    ARROW="=>"
+    LESS_OR_EQUAL="<="
+    GREATER_OR_EQUAL=">="
+    IS_EQUAL="=="
+    NOT_EQUAL="!="
+    LEFT_ANGLE_BRACKET="<"
+    RIGHT_ANGLE_BRACKET=">"
+    COMMA=","
+    OPEN_PAREN="("
+    CLOSE_PAREN=")"
+    OPEN_BRACKET="["
+    CLOSE_BRACKET="]"
+    OPEN_BRACE="{"
+    CLOSE_BRACE="}"
+    DOT="."
+    AS="as"
+    INC="++"
+    PLUS_EQUAL="+="
+    PLUS="+"
+    DEC="--"
+    MINUS_EQUAL="-="
+    MINUS="-"
+    MUL="*"
+    DIV="/"
+    MODULO="%"
+    BANG="!"
+    TRUE="true"
+    FALSE="false"
+    AND="&&"
+    OR="||"
+    PIPE="|"
+    SPREAD="..."
+    AT="@"
+    TYPE="type"
+    RETURN="return"
+    NAMESPACE_KW="namespace"
+    IF="if"
+    ELSE="else"
+    SWITCH="switch"
+    DEFAULT="default"
+    CASE="case"
+    BREAK="break"
+    QUESTION_MARK="?"
+    FOR="for"
+    OF="of"
+    WHILE="while"
+    ID="regexp:_?([a-zA-Z][a-zA-Z_0-9]*)?"
+    INT_LITERAL="regexp:[0-9][0-9_]*"
+    STRING_LITERAL='regexp:\"([^\"\r\n]|(\\\"))*\"'
+    LINE_COMMENT="regexp://.*"
+    BLOCK_COMMENT="regexp:/\*[\s\S]*?\*/"
+    WHITE_SPACE="regexp:\s+"
+  ]
+}
+
+ligoFile ::= (top_level_statement statement_separator?) *
+
+private left statement_separator ::= ";"{name=";"}
+
+private top_level_statement ::= namespace | binding
+
+namespace ::= "namespace" ID "{" (top_level_statement statement_separator?)* "}"
+
+private binding ::= const_binding | let_binding | type_alias
+
+type_alias ::= "type" ID generic_arg_types_list? "=" type_ref {extends="code_block_statement"}
+
+const_binding ::= annotation_list "const" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
+
+let_binding ::= annotation_list "let" def_var_id (":" type_ref)? "=" binding_rhs {extends="code_block_statement"}
+
+annotation_list ::= annotation*
+
+annotation ::= "@" ID
+
+type_ref ::=
+    simple_type_ref
+    | tuple_type_ref
+    | record_type_ref
+    | func_type_ref
+    | variant_type_ref
+    | INT_LITERAL
+
+simple_type_ref ::= ID type_generics?
+
+tuple_type_ref ::= "[" type_ref (COMMA type_ref)* "]"
+
+record_type_ref ::= "{" record_field_type (COMMA record_field_type)* "}"
+
+variant_type_ref ::= variant_type_item ("|" variant_type_item)*
+variant_type_item ::= "[" STRING_LITERAL ("," type_ref)* "]"
+
+func_type_ref ::= func_def_arg_list "=>" type_ref
+
+record_field_type ::= ID ":" type_ref
+
+type_generics ::= ("<" type_ref (COMMA type_ref)* ">")
+
+binding_rhs ::= value_expr
+
+value_expr ::=
+    ternary_value_expr
+    | unary_value_exp_group
+    | composed_value_expr_group
+    | primary_value_expr_group
+
+private unary_value_exp_group ::=
+    unary_minus_value_expr
+    | unary_not_value_expr
+    | prefix_inc_value_expr
+    | postfix_inc_value_expr
+    | prefix_dec_value_expr
+    | postfix_dec_value_expr
+
+private composed_value_expr_group ::=
+    type_qualified_value_expr
+    | math_value_expr
+    | comparison_value_expr
+    | boolean_value_expr
+
+private primary_value_expr_group ::=
+    func_def_value_expr
+    | nested_ref_call_value_expr
+    | parens_value_expr
+    | tuple_value_expr
+    | record_value_expr
+    | var_ref_value_expr
+    | literal_value_expr
+
+func_def_value_expr ::= func_def_value_expr_signature "=>" (code_block | value_expr)
+
+code_block ::= "{" code_block_content "}"
+code_block_content ::= (code_block_statement statement_separator?)+
+
+code_block_statement ::=
+    binding
+    | re_binding
+    | return_statement
+    | if_else_statement
+    | switch_statement
+    | for_statement
+    | while_statement
+    | nested_ref_call_value_expr
+
+re_binding ::= def_var_id (":" type_ref)? re_bin_operator binding_rhs {extends="code_block_statement"}
+re_bin_operator ::= "=" | "+=" | "-="
+
+return_statement ::= "return" value_expr {extends=code_block_statement}
+
+switch_statement ::= "switch" parens_value_expr "{" switch_statement_body "}" {extends=code_block_statement}
+
+switch_statement_body ::= switch_case+ switch_default_case? | switch_default_case {name="switch statement should contain at least one case or default"}
+switch_case ::= "case" literal_value_expr ":" (switch_case_code_block)?
+switch_default_case ::= "default" ":" switch_case_code_block
+switch_case_code_block ::= (code_block_statement statement_separator?)+ ("break" statement_separator?)?
+
+if_else_statement ::= if_statement ("else" code_block)? {extends=code_block_statement}
+if_statement ::= "if" "(" value_expr ")" code_block {extends=code_block_statement}
+
+
+private for_statement ::= for_i_statement | for_each_statement
+for_i_statement ::= "for" "(" for_i_def ";" for_i_stop ";" for_i_update ")" code_block {extends=code_block_statement}
+for_i_def ::= const_binding | let_binding
+for_i_stop ::= value_expr
+for_i_update ::= value_expr
+
+for_each_statement ::= "for" "(" ("const" | "let") ID "of" value_expr ")" code_block {extends=code_block_statement}
+
+while_statement ::= "while" "(" value_expr ")" code_block
+
+func_def_value_expr_signature ::= ID | generic_arg_types_list? func_def_arg_list (":" type_ref)?
+
+func_def_arg_list ::= "(" (func_def_arg (COMMA func_def_arg)*)? ")"
+generic_arg_types_list ::= "<" generic_type_ids ">"
+generic_type_ids ::= ID ("," ID)*
+
+func_def_arg ::= def_var_id (":" type_ref)?
+
+def_var_id ::= ID | destruct_tuple_ids | destruct_record_ids
+
+destruct_tuple_ids ::= "[" def_var_id ("," def_var_id)* "]"
+
+destruct_record_ids ::= "{" destruct_record_field ("," destruct_record_field)* "}"
+
+destruct_record_field ::= record_field_name (":" record_field_alias)?
+record_field_name ::= ID
+record_field_alias ::= ID
+
+nested_ref_call_value_expr ::= (nested_ref | parens_value_expr) func_call_args?
+
+func_call_args ::= "(" (value_expr ("," value_expr)*)? ")"
+
+tuple_value_expr ::= "[" (tuple_content_item ("," tuple_content_item)*)? "]"
+private tuple_content_item ::= value_expr | var_spreading_ref_expr
+
+record_value_expr ::= "{" record_content_item ("," record_content_item)* "}"
+private record_content_item ::= record_value_field_def | var_spreading_ref_expr
+record_value_field_def ::= record_field_name ":" value_expr
+
+literal_value_expr ::= INT_LITERAL | STRING_LITERAL | "true" | "false"
+
+var_ref_value_expr ::= ID
+
+var_spreading_ref_expr ::= "..." nested_ref_call_value_expr
+
+parens_value_expr ::= "(" value_expr ")"
+
+nested_ref ::= (ref_id ".")* ref_id
+
+ref_id ::= ID
+
+type_qualified_value_expr ::= value_expr "as" type_ref
+
+math_value_expr ::= value_expr (math_operator value_expr) +
+
+comparison_value_expr ::= value_expr comparison_operator value_expr
+
+boolean_value_expr ::= value_expr boolean_operator value_expr
+
+ternary_value_expr ::= value_expr "?" ternary_block_value_expr ":" ternary_block_value_expr
+private ternary_block_value_expr ::= ternary_value_expr| value_expr
+
+unary_minus_value_expr ::= "-" value_expr
+unary_not_value_expr ::= "!" value_expr
+prefix_inc_value_expr ::= "++" value_expr
+postfix_inc_value_expr ::= value_expr "++"
+prefix_dec_value_expr ::= "--" value_expr
+postfix_dec_value_expr ::= value_expr "--"
+
+math_operator ::= "+" | "-" | "*" | "/" | "%"
+
+comparison_operator ::= "<" | "<=" | "==" | ">=" | ">"
+
+boolean_operator ::= "&&" | "||" | "==" | "!="
